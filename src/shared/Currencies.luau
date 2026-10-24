@@ -46,7 +46,7 @@ Currencies.list = {
 		name = "Estrellas",
 		color = Color3.fromRGB(255, 215, 60),
 		file = "estrella.png",
-		icon = "",
+		icon = "91869186350550",
 		bar = false,
 		pad = { min = 1, max = 3, cooldown = 5 },
 	},
