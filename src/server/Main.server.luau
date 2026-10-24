@@ -48,7 +48,7 @@ local function label(pedestal: BasePart, egg: Model, def)
 
 	local gui = Ui.new("BillboardGui", {
 		Name = "EggLabel",
-		Size = UDim2.fromOffset(220, 62),
+		Size = UDim2.fromOffset(220, 104),
 		MaxDistance = LABEL_RANGE,
 		LightInfluence = 0,
 		Adornee = anchor,
@@ -113,11 +113,41 @@ local function label(pedestal: BasePart, egg: Model, def)
 		Ui.new("UIStroke", { Color = element.dark, Thickness = 1.5, Parent = holder:FindFirstChild("Char") })
 	end
 
-	-- Una plaquita por elemento, una al lado de la otra.
+	-- Arriba de todo, la bandera de cada elemento; abajo de las banderas, una plaquita con el nombre.
+	local banners = Ui.new("Frame", {
+		Name = "Banners",
+		AnchorPoint = Vector2.new(0.5, 0),
+		Position = UDim2.fromScale(0.5, 0),
+		Size = UDim2.fromOffset(0, 40),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundTransparency = 1,
+		Parent = gui,
+	})
+	Ui.new("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		Padding = UDim.new(0, 8),
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Parent = banners,
+	})
+	for order, each in elements do
+		if each.icon then
+			Ui.new("ImageLabel", {
+				Name = "Banner",
+				LayoutOrder = order,
+				Size = UDim2.fromOffset(32, 40), -- las banderas son un poco más altas que anchas
+				BackgroundTransparency = 1,
+				Image = each.icon,
+				ScaleType = Enum.ScaleType.Fit,
+				Parent = banners,
+			})
+		end
+	end
+
 	local tags = Ui.new("Frame", {
 		Name = "Elements",
 		AnchorPoint = Vector2.new(0.5, 0),
-		Position = UDim2.fromScale(0.5, 0),
+		Position = UDim2.new(0.5, 0, 0, 44),
 		Size = UDim2.fromOffset(0, 20),
 		AutomaticSize = Enum.AutomaticSize.X,
 		BackgroundTransparency = 1,
@@ -140,7 +170,7 @@ local function label(pedestal: BasePart, egg: Model, def)
 			Parent = tags,
 		})
 		Ui.round(tag, 6)
-		Ui.new("UIPadding", { PaddingLeft = UDim.new(0, if each.icon then 4 else 7), PaddingRight = UDim.new(0, 7), Parent = tag })
+		Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 7), PaddingRight = UDim.new(0, 7), Parent = tag })
 		Ui.new("UIStroke", { Color = each.color, Thickness = 1.5, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = tag })
 		Ui.new("UIListLayout", {
 			FillDirection = Enum.FillDirection.Horizontal,
@@ -149,17 +179,6 @@ local function label(pedestal: BasePart, egg: Model, def)
 			SortOrder = Enum.SortOrder.LayoutOrder,
 			Parent = tag,
 		})
-		if each.icon then
-			Ui.new("ImageLabel", {
-				Name = "Icon",
-				LayoutOrder = 1,
-				Size = UDim2.fromOffset(15, 19), -- las banderas son un poco más altas que anchas
-				BackgroundTransparency = 1,
-				Image = each.icon,
-				ScaleType = Enum.ScaleType.Fit,
-				Parent = tag,
-			})
-		end
 		Ui.new("TextLabel", {
 			Name = "Name",
 			LayoutOrder = 2,
