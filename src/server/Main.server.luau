@@ -1,15 +1,18 @@
--- Galería: todos los huevos en ronda, cada uno en su pedestal mirando al centro, con su nombre arriba.
+-- Galería: todos los huevos en ronda, cada uno en su pedestal mirando al centro, con su etiqueta arriba.
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Kit = require(ReplicatedStorage.Kit)
 local Eggs = require(ReplicatedStorage.Shared.Eggs)
 local EggBuilder = require(ReplicatedStorage.Shared.EggBuilder)
+local Elements = require(ReplicatedStorage.Shared.Elements)
 
 local Parts = Kit.Parts
+local Ui = Kit.Ui
 
 local SPACING = 24 -- studs entre huevo y huevo
 local PEDESTAL = 2
+local LABEL_GAP = 7 -- studs entre la punta del huevo y la etiqueta
 
 Lighting.ClockTime = 14
 Lighting.Brightness = 2.5
@@ -25,22 +28,95 @@ local gallery = Instance.new("Folder")
 gallery.Name = "Gallery"
 gallery.Parent = workspace
 
-local function label(pedestal: BasePart, def)
-	local gui = Instance.new("BillboardGui")
-	gui.Name = "Label"
-	gui.Size = UDim2.fromOffset(240, 44)
-	gui.StudsOffsetWorldSpace = Vector3.new(0, EggBuilder.Shape.rows * EggBuilder.Shape.brick + 5, 0)
-	gui.MaxDistance = 90
-	local text = Instance.new("TextLabel")
-	text.Size = UDim2.fromScale(1, 1)
-	text.BackgroundTransparency = 1
-	text.Font = Enum.Font.FredokaOne
-	text.TextScaled = true
-	text.TextColor3 = Color3.new(1, 1, 1)
-	text.TextStrokeTransparency = 0.2
-	text.Text = `{def.icon} {def.name}`
-	text.Parent = gui
-	gui.Parent = pedestal
+-- Etiqueta con el nombre (una letra por TextLabel, así el cliente las hace saltar en ola) y el
+-- elemento arriba, con los colores del elemento. La animación está en Labels.client.luau.
+local function label(pedestal: BasePart, egg: Model, def)
+	local element = Elements.byId[def.element] or Elements.byId.normal
+	local box, size = egg:GetBoundingBox()
+
+	local anchor = Instance.new("Attachment")
+	anchor.Name = "LabelAnchor"
+	anchor.Parent = pedestal
+	anchor.WorldCFrame = CFrame.new(box.Position.X, box.Position.Y + size.Y / 2 + LABEL_GAP, box.Position.Z)
+
+	local gui = Ui.new("BillboardGui", {
+		Name = "EggLabel",
+		Size = UDim2.fromOffset(360, 110),
+		MaxDistance = 160,
+		LightInfluence = 0,
+		Adornee = anchor,
+	})
+
+	local plate = Ui.new("Frame", {
+		Name = "Plate",
+		AnchorPoint = Vector2.new(0.5, 1),
+		Position = UDim2.fromScale(0.5, 1),
+		Size = UDim2.fromOffset(0, 58),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		Parent = gui,
+	})
+	Ui.round(plate, 16)
+	Ui.new("UIStroke", { Color = element.dark, Thickness = 3, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = plate })
+	Ui.new("UIGradient", {
+		Name = "Colors",
+		Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, element.light),
+			ColorSequenceKeypoint.new(0.5, element.color),
+			ColorSequenceKeypoint.new(1, element.dark),
+		}),
+		Parent = plate,
+	})
+	Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 18), PaddingRight = UDim.new(0, 18), Parent = plate })
+	Ui.new("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		VerticalAlignment = Enum.VerticalAlignment.Center,
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Parent = plate,
+	})
+	for index, char in utf8.codes(def.name) do
+		local letter = utf8.char(char)
+		local holder = Ui.new("Frame", {
+			Name = "Letter",
+			LayoutOrder = index,
+			Size = UDim2.new(0, if letter == " " then 12 else 0, 1, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundTransparency = 1,
+			Parent = plate,
+		})
+		Ui.new("TextLabel", {
+			Name = "Char",
+			Size = UDim2.fromScale(0, 1),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundTransparency = 1,
+			Font = Enum.Font.FredokaOne,
+			TextSize = 36,
+			TextColor3 = Color3.new(1, 1, 1),
+			Text = letter,
+			Parent = holder,
+		})
+		Ui.new("UIStroke", { Color = element.dark, Thickness = 2.5, Parent = holder:FindFirstChild("Char") })
+	end
+
+	local tag = Ui.new("TextLabel", {
+		Name = "Element",
+		AnchorPoint = Vector2.new(0.5, 0),
+		Position = UDim2.fromScale(0.5, 0),
+		Size = UDim2.fromOffset(0, 30),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundColor3 = element.dark,
+		Font = Enum.Font.FredokaOne,
+		TextSize = 20,
+		TextColor3 = element.light,
+		Text = string.upper(element.name),
+		Parent = gui,
+	})
+	Ui.round(tag, 10)
+	Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12), Parent = tag })
+	Ui.new("UIStroke", { Color = element.color, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = tag })
+
+	gui.Parent = anchor
 end
 
 local radius = math.max(60, #Eggs.list * SPACING / (2 * math.pi))
@@ -56,7 +132,7 @@ for index, def in Eggs.list do
 
 	local egg = EggBuilder.build(def, nil, facing * CFrame.new(0, PEDESTAL, 0))
 	egg.ModelStreamingMode = Enum.ModelStreamingMode.Atomic -- que llegue entero al cliente (lo hace girar)
-	label(pedestal, def)
+	label(pedestal, egg, def)
 	egg.Parent = gallery
 	total += #egg:GetDescendants()
 end

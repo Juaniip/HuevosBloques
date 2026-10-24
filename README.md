@@ -62,10 +62,12 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | `src/shared/EggBuilder.luau` | Arma la cáscara por capas, la pinta y junta las celdas iguales en ladrillos de 1 a 4 |
 | `src/shared/EggDecor.luau` | Adornos: aletas, espinas, brazo de cactus, coral, estrella, hojas, cúpulas, puntos, pie, copos, pinos, cuernos, visor, corona, alas, flor de loto y mariposas |
 | `src/shared/Paint.luau` | Ayudas para pintar (elegir color por peso, líneas, óvalos a los costados) |
-| `src/server/Main.server.luau` | La galería |
+| `src/shared/Elements.luau` | Los elementos (Fuego, Agua, Planta, Hielo...) y los colores de sus etiquetas |
+| `src/server/Main.server.luau` | La galería y las etiquetas arriba de cada huevo |
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
+| `src/client/Labels.client.luau` | Anima las etiquetas: letras en ola, cartel que flota y colores que giran |
 
-**Agregar un huevo:** copiá uno de `Eggs.list` y cambiale el `id`, la paleta y la función `paint`.
+**Agregar un huevo:** copiá uno de `Eggs.list` y cambiale el `id`, el `element`, la paleta y la función `paint`.
 `paint(c)` recibe la posición de cada ladrillo (`c.t` = altura de -1 a 1, `c.u`/`c.v` = posición
 sobre el frente, `c.noise` = manchas) y devuelve el nombre de un color de la paleta. La forma del
 huevo (ancho, capas, qué tan panzón) está en `EggBuilder.Shape`.

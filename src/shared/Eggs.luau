@@ -1,6 +1,7 @@
 -- Todos los huevos (las fotos de referencia están en Escritorio/Huevos).
 --
 -- Cada huevo tiene:
+--   element  su elemento (ver Elements.luau): le da el color a la etiqueta
 --   palette  colores por nombre: { r, g, b }, con neon = true o glass = transparencia si hace falta
 --   paint(c) devuelve el nombre del color de cada ladrillo. `c` trae:
 --              c.t      altura de -1 (abajo) a 1 (arriba)
@@ -40,8 +41,8 @@ local Eggs = {}
 Eggs.list = {
 	{
 		id = "caballito_mar",
+		element = "agua",
 		name = "Caballito de Mar",
-		icon = "🐴",
 		palette = {
 			lavender = { 180, 150, 230 },
 			glassBlue = { 60, 150, 230, glass = 0.3 },
@@ -87,8 +88,8 @@ Eggs.list = {
 	},
 	{
 		id = "cactus",
+		element = "planta",
 		name = "Cactus",
-		icon = "🌵",
 		palette = {
 			green = { 40, 140, 60 },
 			lime = { 150, 195, 50 },
@@ -111,8 +112,8 @@ Eggs.list = {
 	},
 	{
 		id = "chicle",
+		element = "dulce",
 		name = "Chicle",
-		icon = "🍬",
 		tiles = 0.45,
 		palette = {
 			pink = { 235, 130, 185 },
@@ -126,8 +127,8 @@ Eggs.list = {
 	},
 	{
 		id = "coral",
+		element = "agua",
 		name = "Coral",
-		icon = "🪸",
 		palette = {
 			coral = { 240, 110, 100 },
 			red = { 200, 40, 40 },
@@ -162,8 +163,8 @@ Eggs.list = {
 	},
 	{
 		id = "electrico",
+		element = "electrico",
 		name = "Eléctrico",
-		icon = "⚡",
 		palette = {
 			yellow = { 250, 205, 30 },
 			lime = { 190, 220, 50 },
@@ -182,8 +183,8 @@ Eggs.list = {
 	},
 	{
 		id = "estrella",
+		element = "cosmico",
 		name = "Estrella",
-		icon = "⭐",
 		palette = {
 			blue = { 70, 155, 215 },
 			dark = { 40, 100, 190 },
@@ -213,8 +214,8 @@ Eggs.list = {
 	},
 	{
 		id = "fuego",
+		element = "fuego",
 		name = "Fuego",
-		icon = "🔥",
 		tiles = 0.4,
 		palette = {
 			dark = { 140, 30, 30 },
@@ -242,8 +243,8 @@ Eggs.list = {
 	},
 	{
 		id = "pez_linterna",
+		element = "agua",
 		name = "Pez Linterna",
-		icon = "🐟",
 		palette = {
 			navy = { 30, 50, 90 },
 			blue = { 40, 95, 185 },
@@ -279,8 +280,8 @@ Eggs.list = {
 	},
 	{
 		id = "roca_flamante",
+		element = "tierra",
 		name = "Roca Flamante",
-		icon = "🪨",
 		tiles = 0.55,
 		palette = {
 			dark = { 120, 25, 25 },
@@ -306,8 +307,8 @@ Eggs.list = {
 	},
 	{
 		id = "tierra",
+		element = "tierra",
 		name = "Tierra",
-		icon = "🟫",
 		palette = {
 			dark = { 90, 55, 35 },
 			brown = { 125, 72, 40 },
@@ -322,8 +323,8 @@ Eggs.list = {
 	},
 	{
 		id = "tormenta",
+		element = "electrico",
 		name = "Tormenta",
-		icon = "⛈️",
 		palette = {
 			navy = { 30, 45, 75 },
 			black = { 25, 25, 30 },
@@ -340,8 +341,8 @@ Eggs.list = {
 	},
 	{
 		id = "tropical",
+		element = "planta",
 		name = "Tropical",
-		icon = "🌴",
 		palette = {
 			brown = { 110, 65, 35 },
 			tan = { 170, 110, 60 },
@@ -371,8 +372,8 @@ Eggs.list = {
 	},
 	{
 		id = "vegetal",
+		element = "planta",
 		name = "Vegetal",
-		icon = "🌿",
 		palette = {
 			dark = { 30, 90, 40 },
 			green = { 40, 150, 60 },
@@ -396,8 +397,8 @@ Eggs.list = {
 	},
 	{
 		id = "ventisca",
+		element = "hielo",
 		name = "Ventisca",
-		icon = "🌨️",
 		palette = {
 			white = { 240, 245, 250 },
 			ice = { 185, 215, 240 },
@@ -416,8 +417,8 @@ Eggs.list = {
 	},
 	{
 		id = "volcan",
+		element = "fuego",
 		name = "Volcán",
-		icon = "🌋",
 		palette = {
 			black = { 28, 28, 32 },
 			gray = { 90, 90, 95 },
@@ -438,8 +439,8 @@ Eggs.list = {
 	},
 	{
 		id = "hielo",
+		element = "hielo",
 		name = "Hielo",
-		icon = "🧊",
 		tiles = 0.3,
 		palette = {
 			pale = { 190, 230, 245 },
@@ -467,8 +468,8 @@ Eggs.list = {
 	},
 	{
 		id = "agua",
+		element = "agua",
 		name = "Agua",
-		icon = "💧",
 		palette = {
 			navy = { 30, 60, 110 },
 			blue = { 30, 90, 170 },
@@ -497,8 +498,8 @@ Eggs.list = {
 	},
 	{
 		id = "barro",
+		element = "tierra",
 		name = "Barro",
-		icon = "🟤",
 		tiles = 0.15,
 		palette = {
 			mud = { 125, 75, 45 },
@@ -511,8 +512,8 @@ Eggs.list = {
 	},
 	{
 		id = "nube",
+		element = "aire",
 		name = "Nube",
-		icon = "☁️",
 		tiles = 0.45,
 		palette = {
 			white = { 245, 245, 245 },
@@ -540,8 +541,8 @@ Eggs.list = {
 	},
 	{
 		id = "picante",
+		element = "fuego",
 		name = "Picante",
-		icon = "🌶️",
 		palette = {
 			yellow = { 250, 205, 40 },
 			orange = { 240, 120, 30 },
@@ -563,8 +564,8 @@ Eggs.list = {
 	},
 	{
 		id = "pajaro_fuego",
+		element = "fuego",
 		name = "Pájaro de Fuego",
-		icon = "🐦‍🔥",
 		palette = {
 			dark = { 160, 30, 25 },
 			red = { 205, 60, 35 },
@@ -581,8 +582,8 @@ Eggs.list = {
 	},
 	{
 		id = "mariposa",
+		element = "aire",
 		name = "Mariposa",
-		icon = "🦋",
 		palette = {
 			yellow = { 250, 200, 40 },
 			orange = { 240, 140, 40 },
@@ -608,8 +609,8 @@ Eggs.list = {
 	},
 	{
 		id = "nenufar",
+		element = "planta",
 		name = "Nenúfar",
-		icon = "🪷",
 		palette = {
 			dark = { 30, 80, 45 },
 			green = { 45, 130, 65 },
@@ -632,8 +633,8 @@ Eggs.list = {
 	},
 	{
 		id = "camaleon",
+		element = "magico",
 		name = "Camaleón",
-		icon = "🦎",
 		palette = {
 			lime = { 150, 210, 50 },
 			pink = { 230, 70, 160 },
@@ -662,8 +663,8 @@ Eggs.list = {
 	},
 	{
 		id = "paladin",
+		element = "luz",
 		name = "Paladín",
-		icon = "🛡️",
 		palette = {
 			white = { 240, 240, 238 },
 			light = { 210, 214, 220 },
@@ -691,8 +692,8 @@ Eggs.list = {
 	},
 	{
 		id = "laser",
+		element = "electrico",
 		name = "Láser",
-		icon = "🥽",
 		palette = {
 			yellow = { 250, 205, 40 },
 			orange = { 240, 140, 40 },
@@ -720,8 +721,8 @@ Eggs.list = {
 	},
 	{
 		id = "metal_caliente",
+		element = "metal",
 		name = "Metal Caliente",
-		icon = "⚙️",
 		palette = {
 			black = { 30, 30, 32 },
 			dark = { 55, 55, 60 },
@@ -746,8 +747,8 @@ Eggs.list = {
 	},
 	{
 		id = "alpino",
+		element = "hielo",
 		name = "Alpino",
-		icon = "🏔️",
 		palette = {
 			white = { 240, 240, 240 },
 			light = { 195, 198, 202 },
@@ -779,8 +780,8 @@ Eggs.list = {
 	},
 	{
 		id = "copo_nieve",
+		element = "hielo",
 		name = "Copo de Nieve",
-		icon = "❄️",
 		palette = {
 			white = { 248, 250, 252 },
 			pale = { 180, 220, 240 },
@@ -813,8 +814,8 @@ Eggs.list = {
 	},
 	{
 		id = "fuego_fresco",
+		element = "magico",
 		name = "Fuego Fresco",
-		icon = "🌗",
 		palette = {
 			navy = { 25, 40, 75 },
 			blue = { 30, 110, 200 },
@@ -849,8 +850,8 @@ Eggs.list = {
 	},
 	{
 		id = "futbol",
+		element = "normal",
 		name = "Fútbol",
-		icon = "⚽",
 		palette = {
 			white = { 245, 245, 242 },
 			cream = { 230, 230, 225 },
@@ -876,8 +877,8 @@ Eggs.list = {
 	},
 	{
 		id = "cubo_hielo",
+		element = "hielo",
 		name = "Cubo de Hielo",
-		icon = "🧊",
 		tiles = 0.3,
 		palette = {
 			pale = { 170, 215, 240 },
@@ -904,8 +905,8 @@ Eggs.list = {
 	},
 	{
 		id = "helado",
+		element = "dulce",
 		name = "Helado",
-		icon = "🍨",
 		palette = {
 			cream = { 245, 240, 220 },
 			vanilla = { 235, 225, 195 },
@@ -930,8 +931,8 @@ Eggs.list = {
 	},
 	{
 		id = "diente_leon",
+		element = "aire",
 		name = "Diente de León",
-		icon = "🌼",
 		tiles = 0.35,
 		palette = {
 			white = { 245, 245, 242 },
@@ -948,8 +949,8 @@ Eggs.list = {
 	},
 	{
 		id = "mojito",
+		element = "planta",
 		name = "Mojito",
-		icon = "🍹",
 		palette = {
 			yellow = { 250, 210, 40 },
 			citrus = { 215, 220, 50 },
