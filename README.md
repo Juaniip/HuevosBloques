@@ -49,6 +49,10 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | ❄️ Copo de Nieve | Azules con un copo grande al frente y cuatro chicos |
 | 🌗 Fuego Fresco | Mitad azul y mitad naranja, con una costura azul noche |
 | ⚽ Fútbol | Pelota blanca con pentágonos negros y una estrellita dorada |
+| 🧊 Cubo de Hielo | Celestes y transparentes, óvalos azules, puntas de cristal, sobre un cubo de hielo |
+| 🍨 Helado | Rojo abajo, crema que chorrea arriba y una cereza |
+| 🌼 Diente de León | Blanco y gris claro, con semillitas que vuelan |
+| 🍹 Mojito | De amarillo a verde oscuro, con hojas de menta arriba |
 
 ## Cómo está hecho
 

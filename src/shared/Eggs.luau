@@ -9,7 +9,7 @@
 --              c.front  true si la celda está del lado de adelante (c.z < 0)
 --              c.x, c.y, c.z, c.row, c.rng, c.noise(escala, capa?) -> -1..1 (manchas suaves)
 --   tiles    parte de ladrillos lisos, sin studs (0 a 1; 0.25 si no se pone)
---   decor    adornos (ver EggDecor.luau) · stand: pie · fx: fuego, chispas, brillos, luz
+--   decor    adornos (ver EggDecor.luau) · stand: pie (o cubo) · fx: fuego, chispas, brillos, luz
 local Paint = require(script.Parent.Paint)
 
 local pick = Paint.pick
@@ -872,6 +872,109 @@ Eggs.list = {
 		end,
 		decor = {
 			{ kind = "star", theta = 0, t = 0.38, color = "gold", size = 0.4, backing = "wine" },
+		},
+	},
+	{
+		id = "cubo_hielo",
+		name = "Cubo de Hielo",
+		icon = "🧊",
+		tiles = 0.3,
+		palette = {
+			pale = { 170, 215, 240 },
+			sky = { 110, 185, 235 },
+			azure = { 60, 150, 225 },
+			blue = { 30, 100, 200 },
+			glass = { 120, 200, 245, glass = 0.4 },
+			crystal = { 170, 225, 255, glass = 0.35 },
+			cube = { 90, 190, 235, glass = 0.45 },
+		},
+		paint = function(c)
+			local e = Paint.oval(c, 52, 1.8, 2.6, -1.5)
+			if e < 0.5 then
+				return "blue"
+			elseif e < 1 then
+				return "azure"
+			end
+			return pick(c.rng, "sky", 3, "pale", 2, "glass", 2, "azure", 1)
+		end,
+		decor = {
+			{ kind = "horns", count = 8, colors = { "crystal" }, t = 0.8, length = 1.2 },
+		},
+		stand = { color = "cube", cube = true },
+	},
+	{
+		id = "helado",
+		name = "Helado",
+		icon = "🍨",
+		palette = {
+			cream = { 245, 240, 220 },
+			vanilla = { 235, 225, 195 },
+			red = { 200, 30, 35 },
+			dark = { 150, 20, 30 },
+			cherry = { 150, 15, 25 },
+			stem = { 120, 40, 30 },
+		},
+		paint = function(c)
+			-- Crema arriba que chorrea en gotas sobre el rojo.
+			local drip = 0.1 + math.sin(c.theta * 6) * 0.12 + c.noise(0.5) * 0.08
+			if c.t > drip then
+				return pick(c.rng, "cream", 4, "vanilla", 1)
+			elseif c.t < -0.45 then
+				return pick(c.rng, "dark", 3, "red", 1)
+			end
+			return pick(c.rng, "red", 4, "dark", 1)
+		end,
+		decor = {
+			{ kind = "cherry", color = "cherry", stem = "stem" },
+		},
+	},
+	{
+		id = "diente_leon",
+		name = "Diente de León",
+		icon = "🌼",
+		tiles = 0.35,
+		palette = {
+			white = { 245, 245, 242 },
+			light = { 205, 208, 212 },
+			gray = { 160, 163, 170 },
+		},
+		paint = function(c)
+			if Paint.oval(c, 58, 0.9, 1.6, -1) < 1 then
+				return "gray"
+			end
+			return pick(c.rng, "white", 5, "light", 2, "gray", 0.3)
+		end,
+		fx = { sparkles = { 255, 255, 255 } },
+	},
+	{
+		id = "mojito",
+		name = "Mojito",
+		icon = "🍹",
+		palette = {
+			yellow = { 250, 210, 40 },
+			citrus = { 215, 220, 50 },
+			lime = { 150, 200, 50 },
+			green = { 60, 160, 60 },
+			dark = { 30, 95, 45 },
+			mint = { 70, 180, 90 },
+		},
+		paint = function(c)
+			if Paint.oval(c, 55, 2, 3, -1) < 1 then
+				return if c.t > -0.1 then "citrus" else "lime"
+			end
+			if c.t > 0.45 then
+				return pick(c.rng, "yellow", 4, "citrus", 1)
+			elseif c.t > 0.1 then
+				return pick(c.rng, "citrus", 3, "yellow", 1, "lime", 1)
+			elseif c.t > -0.3 then
+				return pick(c.rng, "lime", 4, "citrus", 1)
+			elseif c.t > -0.6 then
+				return pick(c.rng, "green", 4, "lime", 1)
+			end
+			return pick(c.rng, "dark", 4, "green", 1)
+		end,
+		decor = {
+			{ kind = "leaves", color = "mint", tip = "green", stem = "green", clusters = { { theta = 40, t = 0.97, count = 3 } } },
 		},
 	},
 }

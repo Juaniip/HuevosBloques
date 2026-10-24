@@ -328,8 +328,24 @@ function EggDecor.butterflies(ctx, o)
 	end
 end
 
+-- Cereza en la punta: { color, stem }
+function EggDecor.cherry(ctx, o)
+	local top = ctx.baseY + ctx.height
+	smooth(ctx, "Cherry", Vector3.one * 2.6, CFrame.new(0, top + 0.9, 0), o.color, BALL)
+	brick(ctx, "CherryBand", Vector3.new(2.7, 0.8, 2.7), CFrame.new(0, top + 0.9, 0), o.color)
+	smooth(ctx, "CherryStem", Vector3.new(1.8, 0.25, 0.25), CFrame.new(0.25, top + 2.8, 0) * CFrame.Angles(0, 0, math.rad(75)), o.stem, CYLINDER)
+end
+
 -- Pie donde se apoya el huevo. Devuelve su alto (el huevo empieza arriba).
+--   { color }               -- base redonda y baja
+--   { color, cube = true }  -- cubo grande (por ejemplo, de hielo transparente)
 function EggDecor.stand(ctx, o): number
+	if o.cube then
+		local size = 2 * ctx.shape.radius - 1
+		local height = 7
+		brick(ctx, "StandCube", Vector3.new(size, height, size), CFrame.new(0, height / 2, 0), o.color)
+		return height - 1.5 -- el huevo se hunde un poco en el cubo
+	end
 	local height = 1.2
 	smooth(ctx, "Stand", Vector3.new(height, 7, 7), CFrame.new(0, height / 2, 0) * UPRIGHT, o.color, CYLINDER)
 	smooth(ctx, "StandRim", Vector3.new(0.3, 7.6, 7.6), CFrame.new(0, 0.15, 0) * UPRIGHT, o.color, CYLINDER)
