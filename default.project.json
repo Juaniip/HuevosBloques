@@ -1,0 +1,26 @@
+{
+  "name": "HuevosBloques",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Kit": {
+        "$path": "../RobloxDev/Kit/src"
+      },
+      "Shared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerScriptService": {
+      "Server": {
+        "$path": "src/server"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Client": {
+          "$path": "src/client"
+        }
+      }
+    }
+  }
+}
