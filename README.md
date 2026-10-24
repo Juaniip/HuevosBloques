@@ -54,7 +54,7 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 
 | Archivo | Qué hace |
 |---|---|
-| `src/shared/Eggs.luau` | Los 16 huevos: paleta, cómo se pinta cada ladrillo, adornos y efectos |
+| `src/shared/Eggs.luau` | Todos los huevos: paleta, cómo se pinta cada ladrillo, adornos y efectos |
 | `src/shared/EggBuilder.luau` | Arma la cáscara por capas, la pinta y junta las celdas iguales en ladrillos de 1 a 4 |
 | `src/shared/EggDecor.luau` | Adornos: aletas, espinas, brazo de cactus, coral, estrella, hojas, cúpulas, puntos, pie, copos, pinos, cuernos, visor, corona, alas, flor de loto y mariposas |
 | `src/shared/Paint.luau` | Ayudas para pintar (elegir color por peso, líneas, óvalos a los costados) |
