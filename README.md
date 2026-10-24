@@ -54,6 +54,16 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | 🌼 Diente de León | Blanco y gris claro, con semillitas que vuelan |
 | 🍹 Mojito | De amarillo a verde oscuro, con hojas de menta arriba |
 
+## Íconos de los elementos
+
+Roblox no lee imágenes desde la carpeta del proyecto: hay que subirlas una vez.
+
+1. En Studio: **View → Asset Manager → Bulk Import** y elegí los PNG de `assets/elementos`.
+2. Click derecho en cada imagen → **Copy Asset ID**.
+3. Pegá cada id en la tabla `ICONS` de `src/shared/Elements.luau` (por ejemplo `llama = "123456789"`).
+
+Mientras un id esté vacío, la etiqueta muestra el elemento sin ícono.
+
 ## Cómo está hecho
 
 | Archivo | Qué hace |
@@ -62,13 +72,14 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | `src/shared/EggBuilder.luau` | Arma la cáscara por capas, la pinta y junta las celdas iguales en ladrillos de 1 a 4 |
 | `src/shared/EggDecor.luau` | Adornos: aletas, espinas, brazo de cactus, coral, estrella, hojas, cúpulas, puntos, pie, copos, pinos, cuernos, visor, corona, alas, flor de loto y mariposas |
 | `src/shared/Paint.luau` | Ayudas para pintar (elegir color por peso, líneas, óvalos a los costados) |
-| `src/shared/Elements.luau` | Los elementos (Fuego, Agua, Planta, Hielo...) y los colores de sus etiquetas |
+| `src/shared/Elements.luau` | Los 21 elementos (Terra, Llama, Mar, Naturaleza...), sus colores y los ids de sus íconos |
+| `assets/elementos/` | Íconos de los elementos en PNG, listos para subir a Roblox |
 | `src/server/Main.server.luau` | La galería y las etiquetas arriba de cada huevo |
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
 | `src/client/Labels.client.luau` | Anima las etiquetas: letras en ola, cartel que flota y colores que giran |
 
 **Agregar un huevo:** copiá uno de `Eggs.list` y cambiale el `id`, el `element` (uno, o dos como
-`{ "fuego", "hielo" }`), la paleta y la función `paint`.
+`{ "llama", "hielo" }`), la paleta y la función `paint`.
 `paint(c)` recibe la posición de cada ladrillo (`c.t` = altura de -1 a 1, `c.u`/`c.v` = posición
 sobre el frente, `c.noise` = manchas) y devuelve el nombre de un color de la paleta. La forma del
 huevo (ancho, capas, qué tan panzón) está en `EggBuilder.Shape`.

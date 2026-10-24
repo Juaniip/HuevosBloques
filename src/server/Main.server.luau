@@ -126,21 +126,47 @@ local function label(pedestal: BasePart, egg: Model, def)
 		Parent = tags,
 	})
 	for order, each in elements do
-		local tag = Ui.new("TextLabel", {
+		local tag = Ui.new("Frame", {
 			Name = "Element",
 			LayoutOrder = order,
 			Size = UDim2.fromOffset(0, 30),
 			AutomaticSize = Enum.AutomaticSize.X,
 			BackgroundColor3 = each.dark,
+			Parent = tags,
+		})
+		Ui.round(tag, 10)
+		Ui.new("UIPadding", { PaddingLeft = UDim.new(0, if each.icon then 6 else 12), PaddingRight = UDim.new(0, 12), Parent = tag })
+		Ui.new("UIStroke", { Color = each.color, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = tag })
+		Ui.new("UIListLayout", {
+			FillDirection = Enum.FillDirection.Horizontal,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
+			Padding = UDim.new(0, 5),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Parent = tag,
+		})
+		if each.icon then
+			Ui.new("ImageLabel", {
+				Name = "Icon",
+				LayoutOrder = 1,
+				Size = UDim2.fromOffset(13, 27), -- los íconos son banderitas angostas
+				BackgroundTransparency = 1,
+				Image = each.icon,
+				ScaleType = Enum.ScaleType.Fit,
+				Parent = tag,
+			})
+		end
+		Ui.new("TextLabel", {
+			Name = "Name",
+			LayoutOrder = 2,
+			Size = UDim2.fromScale(0, 1),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundTransparency = 1,
 			Font = Enum.Font.FredokaOne,
 			TextSize = 20,
 			TextColor3 = each.light,
 			Text = string.upper(each.name),
-			Parent = tags,
+			Parent = tag,
 		})
-		Ui.round(tag, 10)
-		Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12), Parent = tag })
-		Ui.new("UIStroke", { Color = each.color, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = tag })
 	end
 
 	gui.Parent = anchor

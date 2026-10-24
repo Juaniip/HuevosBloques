@@ -1,7 +1,7 @@
 -- Todos los huevos (las fotos de referencia están en Escritorio/Huevos).
 --
 -- Cada huevo tiene:
---   element  su elemento (ver Elements.luau), o dos: { "fuego", "hielo" }. Le da el color a la etiqueta
+--   element  su elemento (ver Elements.luau), o dos: { "llama", "hielo" }. Le da el color a la etiqueta
 --   palette  colores por nombre: { r, g, b }, con neon = true o glass = transparencia si hace falta
 --   paint(c) devuelve el nombre del color de cada ladrillo. `c` trae:
 --              c.t      altura de -1 (abajo) a 1 (arriba)
@@ -41,7 +41,7 @@ local Eggs = {}
 Eggs.list = {
 	{
 		id = "caballito_mar",
-		element = "agua",
+		element = { "mar", "naturaleza" },
 		name = "Caballito de Mar",
 		palette = {
 			lavender = { 180, 150, 230 },
@@ -88,7 +88,7 @@ Eggs.list = {
 	},
 	{
 		id = "cactus",
-		element = "planta",
+		element = { "terra", "naturaleza" },
 		name = "Cactus",
 		palette = {
 			green = { 40, 140, 60 },
@@ -112,7 +112,7 @@ Eggs.list = {
 	},
 	{
 		id = "chicle",
-		element = "dulce",
+		element = { "naturaleza", "electrico" },
 		name = "Chicle",
 		tiles = 0.45,
 		palette = {
@@ -127,7 +127,7 @@ Eggs.list = {
 	},
 	{
 		id = "coral",
-		element = "agua",
+		element = { "naturaleza", "mar" },
 		name = "Coral",
 		palette = {
 			coral = { 240, 110, 100 },
@@ -183,7 +183,7 @@ Eggs.list = {
 	},
 	{
 		id = "estrella",
-		element = "cosmico",
+		element = { "terra", "electrico" },
 		name = "Estrella",
 		palette = {
 			blue = { 70, 155, 215 },
@@ -214,7 +214,7 @@ Eggs.list = {
 	},
 	{
 		id = "fuego",
-		element = "fuego",
+		element = "llama",
 		name = "Fuego",
 		tiles = 0.4,
 		palette = {
@@ -243,7 +243,7 @@ Eggs.list = {
 	},
 	{
 		id = "pez_linterna",
-		element = { "agua", "luz" },
+		element = { "mar", "electrico" },
 		name = "Pez Linterna",
 		palette = {
 			navy = { 30, 50, 90 },
@@ -280,7 +280,7 @@ Eggs.list = {
 	},
 	{
 		id = "roca_flamante",
-		element = { "tierra", "fuego" },
+		element = { "terra", "llama" },
 		name = "Roca Flamante",
 		tiles = 0.55,
 		palette = {
@@ -307,7 +307,7 @@ Eggs.list = {
 	},
 	{
 		id = "tierra",
-		element = "tierra",
+		element = "terra",
 		name = "Tierra",
 		palette = {
 			dark = { 90, 55, 35 },
@@ -323,7 +323,7 @@ Eggs.list = {
 	},
 	{
 		id = "tormenta",
-		element = { "electrico", "aire" },
+		element = { "mar", "electrico" },
 		name = "Tormenta",
 		palette = {
 			navy = { 30, 45, 75 },
@@ -341,7 +341,7 @@ Eggs.list = {
 	},
 	{
 		id = "tropical",
-		element = "planta",
+		element = { "terra", "naturaleza" },
 		name = "Tropical",
 		palette = {
 			brown = { 110, 65, 35 },
@@ -372,7 +372,7 @@ Eggs.list = {
 	},
 	{
 		id = "vegetal",
-		element = "planta",
+		element = "naturaleza",
 		name = "Vegetal",
 		palette = {
 			dark = { 30, 90, 40 },
@@ -397,7 +397,7 @@ Eggs.list = {
 	},
 	{
 		id = "ventisca",
-		element = { "hielo", "aire" },
+		element = { "mar", "llama" },
 		name = "Ventisca",
 		palette = {
 			white = { 240, 245, 250 },
@@ -417,7 +417,7 @@ Eggs.list = {
 	},
 	{
 		id = "volcan",
-		element = { "fuego", "tierra" },
+		element = { "llama", "terra" },
 		name = "Volcán",
 		palette = {
 			black = { 28, 28, 32 },
@@ -468,7 +468,7 @@ Eggs.list = {
 	},
 	{
 		id = "agua",
-		element = "agua",
+		element = "mar",
 		name = "Agua",
 		palette = {
 			navy = { 30, 60, 110 },
@@ -498,7 +498,7 @@ Eggs.list = {
 	},
 	{
 		id = "barro",
-		element = { "tierra", "agua" },
+		element = { "terra", "mar" },
 		name = "Barro",
 		tiles = 0.15,
 		palette = {
@@ -512,7 +512,7 @@ Eggs.list = {
 	},
 	{
 		id = "nube",
-		element = "aire",
+		element = { "llama", "mar" },
 		name = "Nube",
 		tiles = 0.45,
 		palette = {
@@ -541,7 +541,7 @@ Eggs.list = {
 	},
 	{
 		id = "picante",
-		element = { "fuego", "planta" },
+		element = { "llama", "naturaleza" },
 		name = "Picante",
 		palette = {
 			yellow = { 250, 205, 40 },
@@ -564,7 +564,7 @@ Eggs.list = {
 	},
 	{
 		id = "pajaro_fuego",
-		element = { "fuego", "aire" },
+		element = { "llama", "naturaleza" },
 		name = "Pájaro de Fuego",
 		palette = {
 			dark = { 160, 30, 25 },
@@ -582,7 +582,7 @@ Eggs.list = {
 	},
 	{
 		id = "mariposa",
-		element = "aire",
+		element = { "naturaleza", "llama" },
 		name = "Mariposa",
 		palette = {
 			yellow = { 250, 200, 40 },
@@ -609,7 +609,7 @@ Eggs.list = {
 	},
 	{
 		id = "nenufar",
-		element = { "planta", "agua" },
+		element = { "mar", "naturaleza" },
 		name = "Nenúfar",
 		palette = {
 			dark = { 30, 80, 45 },
@@ -633,7 +633,7 @@ Eggs.list = {
 	},
 	{
 		id = "camaleon",
-		element = "magico",
+		element = { "terra", "electrico" },
 		name = "Camaleón",
 		palette = {
 			lime = { 150, 210, 50 },
@@ -663,7 +663,7 @@ Eggs.list = {
 	},
 	{
 		id = "paladin",
-		element = "luz",
+		element = { "electrico", "terra" },
 		name = "Paladín",
 		palette = {
 			white = { 240, 240, 238 },
@@ -692,7 +692,7 @@ Eggs.list = {
 	},
 	{
 		id = "laser",
-		element = { "electrico", "luz" },
+		element = { "llama", "electrico" },
 		name = "Láser",
 		palette = {
 			yellow = { 250, 205, 40 },
@@ -721,7 +721,7 @@ Eggs.list = {
 	},
 	{
 		id = "metal_caliente",
-		element = { "metal", "fuego" },
+		element = { "electrico", "llama" },
 		name = "Metal Caliente",
 		palette = {
 			black = { 30, 30, 32 },
@@ -747,7 +747,7 @@ Eggs.list = {
 	},
 	{
 		id = "alpino",
-		element = { "hielo", "tierra" },
+		element = { "terra", "hielo" },
 		name = "Alpino",
 		palette = {
 			white = { 240, 240, 240 },
@@ -780,7 +780,7 @@ Eggs.list = {
 	},
 	{
 		id = "copo_nieve",
-		element = "hielo",
+		element = { "terra", "hielo" },
 		name = "Copo de Nieve",
 		palette = {
 			white = { 248, 250, 252 },
@@ -814,7 +814,7 @@ Eggs.list = {
 	},
 	{
 		id = "fuego_fresco",
-		element = { "fuego", "hielo" },
+		element = { "llama", "hielo" },
 		name = "Fuego Fresco",
 		palette = {
 			navy = { 25, 40, 75 },
@@ -850,7 +850,7 @@ Eggs.list = {
 	},
 	{
 		id = "futbol",
-		element = "normal",
+		element = { "hielo", "llama" },
 		name = "Fútbol",
 		palette = {
 			white = { 245, 245, 242 },
@@ -877,7 +877,7 @@ Eggs.list = {
 	},
 	{
 		id = "cubo_hielo",
-		element = "hielo",
+		element = { "mar", "hielo" },
 		name = "Cubo de Hielo",
 		tiles = 0.3,
 		palette = {
@@ -905,7 +905,7 @@ Eggs.list = {
 	},
 	{
 		id = "helado",
-		element = { "dulce", "hielo" },
+		element = { "mar", "hielo" },
 		name = "Helado",
 		palette = {
 			cream = { 245, 240, 220 },
@@ -931,7 +931,7 @@ Eggs.list = {
 	},
 	{
 		id = "diente_leon",
-		element = "aire",
+		element = { "naturaleza", "hielo" },
 		name = "Diente de León",
 		tiles = 0.35,
 		palette = {
@@ -949,7 +949,7 @@ Eggs.list = {
 	},
 	{
 		id = "mojito",
-		element = "planta",
+		element = { "naturaleza", "hielo" },
 		name = "Mojito",
 		palette = {
 			yellow = { 250, 210, 40 },

@@ -1,43 +1,79 @@
--- Elementos de los huevos: el nombre y los colores de su etiqueta.
---   Elements.byId.fuego -> { name = "Fuego", color, light, dark }
+-- Elementos de los huevos: el nombre, los colores de su etiqueta y su ícono.
+--   Elements.byId.llama -> { name = "Llama", color, light, dark, icon }
 --   Elements.of(huevo)  -> los elementos del huevo (uno o dos)
+--
+-- Íconos: los PNG están en assets/elementos. Roblox no los toma desde la carpeta: hay que subirlos
+-- (Studio → View → Asset Manager → Bulk Import) y pegar el id de cada uno en ICONS. Mientras un
+-- id esté vacío, la etiqueta se muestra sin ícono.
 local Elements = {}
 
-Elements.list = {
-	{ id = "fuego", name = "Fuego", color = { 235, 85, 30 }, light = { 255, 190, 70 }, dark = { 120, 25, 10 } },
-	{ id = "agua", name = "Agua", color = { 30, 130, 225 }, light = { 110, 215, 255 }, dark = { 10, 50, 120 } },
-	{ id = "planta", name = "Planta", color = { 60, 170, 60 }, light = { 170, 230, 90 }, dark = { 20, 80, 30 } },
-	{ id = "tierra", name = "Tierra", color = { 150, 95, 50 }, light = { 215, 165, 100 }, dark = { 70, 40, 20 } },
-	{ id = "hielo", name = "Hielo", color = { 120, 200, 240 }, light = { 230, 250, 255 }, dark = { 40, 110, 170 } },
-	{ id = "electrico", name = "Eléctrico", color = { 245, 200, 20 }, light = { 255, 245, 150 }, dark = { 150, 100, 0 } },
-	{ id = "aire", name = "Aire", color = { 150, 190, 215 }, light = { 235, 245, 250 }, dark = { 70, 100, 135 } },
-	{ id = "metal", name = "Metal", color = { 130, 135, 145 }, light = { 215, 220, 228 }, dark = { 45, 48, 55 } },
-	{ id = "luz", name = "Luz", color = { 240, 195, 60 }, light = { 255, 250, 220 }, dark = { 160, 110, 20 } },
-	{ id = "dulce", name = "Dulce", color = { 235, 90, 165 }, light = { 255, 190, 225 }, dark = { 140, 25, 85 } },
-	{ id = "cosmico", name = "Cósmico", color = { 110, 70, 210 }, light = { 190, 160, 255 }, dark = { 35, 20, 90 } },
-	{ id = "magico", name = "Mágico", color = { 200, 70, 220 }, light = { 120, 230, 255 }, dark = { 80, 20, 120 } },
-	{ id = "normal", name = "Normal", color = { 175, 175, 175 }, light = { 250, 250, 250 }, dark = { 60, 60, 60 } },
+local ICONS = {
+	terra = "",
+	llama = "",
+	mar = "",
+	naturaleza = "",
+	electrico = "",
+	hielo = "",
+	metal = "",
+	oscuro = "",
+	luz = "",
+	guerra = "",
+	puro = "",
+	leyenda = "",
+	primitivo = "",
+	viento = "",
+	tiempo = "",
+	magia = "",
+	caos = "",
+	feliz = "",
+	sueno = "",
+	belleza = "",
+	alma = "",
 }
 
--- Lista de elementos de un huevo (acepta "fuego" o { "fuego", "hielo" }).
+-- Colores sacados de cada ícono.
+Elements.list = {
+	{ id = "terra", name = "Terra", color = { 125, 75, 35 } },
+	{ id = "llama", name = "Llama", color = { 210, 45, 55 } },
+	{ id = "mar", name = "Mar", color = { 20, 95, 150 } },
+	{ id = "naturaleza", name = "Naturaleza", color = { 55, 175, 75 } },
+	{ id = "electrico", name = "Eléctrico", color = { 245, 200, 25 } },
+	{ id = "hielo", name = "Hielo", color = { 55, 165, 205 } },
+	{ id = "metal", name = "Metal", color = { 140, 143, 148 } },
+	{ id = "oscuro", name = "Oscuro", color = { 70, 65, 80 } },
+	{ id = "luz", name = "Luz", color = { 240, 210, 100 } },
+	{ id = "guerra", name = "Guerra", color = { 200, 85, 25 } },
+	{ id = "puro", name = "Puro", color = { 200, 75, 165 } },
+	{ id = "leyenda", name = "Leyenda", color = { 100, 35, 170 } },
+	{ id = "primitivo", name = "Primitivo", color = { 100, 70, 55 } },
+	{ id = "viento", name = "Viento", color = { 30, 175, 150 } },
+	{ id = "tiempo", name = "Tiempo", color = { 160, 150, 120 } },
+	{ id = "magia", name = "Magia", color = { 35, 120, 120 } },
+	{ id = "caos", name = "Caos", color = { 170, 65, 40 } },
+	{ id = "feliz", name = "Feliz", color = { 215, 110, 50 } },
+	{ id = "sueno", name = "Sueño", color = { 220, 175, 60 } },
+	{ id = "belleza", name = "Belleza", color = { 215, 85, 165 } },
+	{ id = "alma", name = "Alma", color = { 75, 150, 165 } },
+}
+
+-- Lista de elementos de un huevo (acepta "llama" o { "llama", "hielo" }).
 function Elements.of(def): { any }
 	local ids = if type(def.element) == "table" then def.element else { def.element }
 	local list = {}
 	for _, id in ids do
 		table.insert(list, Elements.byId[id] or error(`[Elements] no existe el elemento "{tostring(id)}"`))
 	end
-	if #list == 0 then
-		table.insert(list, Elements.byId.normal)
-	end
 	return list
 end
 
 Elements.byId = {}
 for _, element in Elements.list do
-	for _, key in { "color", "light", "dark" } do
-		local rgb = element[key]
-		element[key] = Color3.fromRGB(rgb[1], rgb[2], rgb[3])
-	end
+	local rgb = element.color
+	element.color = Color3.fromRGB(rgb[1], rgb[2], rgb[3])
+	element.light = element.color:Lerp(Color3.new(1, 1, 1), 0.55)
+	element.dark = element.color:Lerp(Color3.new(0, 0, 0), 0.55)
+	local icon = ICONS[element.id]
+	element.icon = if icon and icon ~= "" then (if string.find(icon, "://") then icon else "rbxassetid://" .. icon) else nil
 	Elements.byId[element.id] = element
 end
 
