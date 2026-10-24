@@ -978,6 +978,765 @@ Eggs.list = {
 			{ kind = "leaves", color = "mint", tip = "green", stem = "green", clusters = { { theta = 40, t = 0.97, count = 3 } } },
 		},
 	},
+	{
+		id = "puro_fuego",
+		element = { "puro", "llama" },
+		name = "Puro Fuego",
+		palette = {
+			red = { 215, 45, 30 },
+			orange = { 245, 120, 25 },
+			yellow = { 250, 205, 40 },
+			cream = { 230, 210, 170 },
+			gold = { 235, 185, 45, shine = 0.15 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			-- Llamas en franjas onduladas.
+			local wave = c.t * 5 + math.sin(c.theta * 3) * 0.6 + c.noise(0.4) * 1.2
+			local band = math.floor(wave) % 3
+			return if band == 0 then "red" elseif band == 1 then "orange" else pick(c.rng, "yellow", 3, "orange", 1)
+		end,
+		decor = {
+			{ kind = "necklace", color = "gold", t = 0.55, drop = 0.35 },
+			{ kind = "horns", count = 2, colors = { "cream" }, t = 0.82, length = 2.6 },
+		},
+		stand = { color = "stand" },
+	},
+	{
+		id = "pura_tierra",
+		element = { "puro", "terra" },
+		name = "Pura Tierra",
+		palette = {
+			brown = { 120, 70, 40 },
+			dark = { 85, 50, 30 },
+			orange = { 200, 110, 45 },
+			tan = { 205, 160, 110 },
+			cream = { 235, 220, 185 },
+			gold = { 235, 185, 45, shine = 0.15 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			local n = c.noise(0.45)
+			if n > 0.3 then
+				return "orange"
+			elseif n < -0.3 then
+				return "tan"
+			end
+			return pick(c.rng, "brown", 3, "dark", 2, "orange", 1)
+		end,
+		decor = {
+			{ kind = "necklace", color = "gold", t = 0.55, drop = 0.35 },
+			{ kind = "fangs", color = "cream", down = true, length = 1.6, ring = { t = -0.6, count = 9 } },
+			{ kind = "flaps", color = "dark", t = 0.8, size = 0.8 },
+		},
+		stand = { color = "stand" },
+	},
+	{
+		id = "puro",
+		element = "puro",
+		name = "Puro",
+		palette = {
+			sky = { 150, 205, 240 },
+			pale = { 200, 230, 248 },
+			white = { 248, 250, 252 },
+			azure = { 95, 170, 225 },
+			gold = { 235, 185, 45, shine = 0.15 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			if c.t > 0.6 then
+				return pick(c.rng, "white", 3, "pale", 1)
+			elseif c.noise(0.35) > 0.3 then
+				return "white"
+			end
+			return pick(c.rng, "sky", 3, "pale", 2, "azure", 1)
+		end,
+		decor = {
+			{ kind = "necklace", color = "gold", t = 0.55, drop = 0.35 },
+			{ kind = "domes", size = 2, colors = { "white", "pale" }, tMin = 0.6, tMax = 0.85, count = 6 },
+		},
+		stand = { color = "stand" },
+		fx = { sparkles = { 255, 245, 200 } },
+	},
+	{
+		id = "espejo",
+		element = "leyenda",
+		name = "Espejo",
+		tiles = 0.4,
+		palette = {
+			chrome = { 175, 178, 185, shine = 0.5 },
+			light = { 215, 218, 224, shine = 0.6 },
+			bright = { 245, 246, 250, shine = 0.7 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			-- Reflejo en diagonal.
+			local d = c.u * 0.8 + c.v
+			if math.abs(d - 0.5) < 1.6 then
+				return "bright"
+			end
+			return if c.t < -0.3 then "light" else "chrome"
+		end,
+		stand = { color = "stand" },
+	},
+	{
+		id = "viento",
+		element = "viento",
+		name = "Viento",
+		palette = {
+			white = { 245, 246, 248 },
+			cloud = { 215, 222, 230 },
+			steel = { 130, 155, 180 },
+			blue = { 160, 185, 210 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			-- Arriba blanco con un remolino; abajo azul acero con vetas.
+			local edge = 0.1 + math.sin(c.theta * 2) * 0.15
+			if c.t > edge then
+				local du, dv = c.u + 1.5, c.v - 4
+				if c.front and math.sqrt(du * du + dv * dv) < 2.2 and math.sqrt(du * du + dv * dv) > 1.2 then
+					return "cloud"
+				end
+				return pick(c.rng, "white", 5, "cloud", 1)
+			end
+			return if c.noise(0.4) > 0.2 then "blue" else "steel"
+		end,
+		stand = { color = "stand" },
+	},
+	{
+		id = "zombie",
+		element = { "metal", "oscuro" },
+		name = "Zombi",
+		palette = {
+			sage = { 160, 175, 160 },
+			gray = { 120, 125, 125 },
+			pale = { 205, 210, 200 },
+			moss = { 130, 150, 125 },
+			crystal = { 190, 165, 235, glass = 0.25 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			local n = c.noise(0.5)
+			if math.abs(n) < 0.05 then
+				return "gray" -- grietas
+			end
+			return pick(c.rng, "sage", 4, "pale", 2, "moss", 2, "gray", 1)
+		end,
+		decor = {
+			{ kind = "fangs", color = "crystal", down = true, length = 2.4, spots = { { -22, 0.15 }, { -10, 0.12 }, { 10, 0.12 }, { 22, 0.15 } } },
+		},
+		stand = { color = "stand" },
+	},
+	{
+		id = "fosil",
+		element = { "oscuro", "hielo" },
+		name = "Fósil",
+		palette = {
+			ice = { 165, 210, 235 },
+			white = { 240, 244, 248 },
+			gray = { 165, 170, 178 },
+			window = { 70, 95, 120, glass = 0.2 },
+			bone = { 220, 215, 200 },
+			wing = { 120, 200, 240, glass = 0.35 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			-- Ventana cuadrada al frente con huesitos adentro.
+			if c.front and c.z < -2 and math.abs(c.u) < 2.6 and c.v > -3 and c.v < 2.2 then
+				if c.rng:NextNumber() < 0.35 then
+					return "bone"
+				end
+				return "window"
+			end
+			return pick(c.rng, "ice", 4, "white", 2, "gray", 2)
+		end,
+		decor = {
+			{ kind = "flaps", color = "wing", t = 0.82 },
+		},
+		stand = { color = "stand" },
+	},
+	{
+		id = "pinguino",
+		element = { "hielo", "oscuro" },
+		name = "Pingüino",
+		palette = {
+			black = { 25, 25, 30 },
+			dark = { 50, 52, 60 },
+			white = { 245, 246, 248 },
+			orange = { 245, 150, 40 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			-- Panza blanca y carita blanca al frente.
+			if c.front then
+				local belly = (c.u / 3.4) ^ 2 + ((c.v + 2.5) / 5) ^ 2
+				local face = (c.u / 2.2) ^ 2 + ((c.v - 4.4) / 1.6) ^ 2
+				if belly < 1 or face < 1 then
+					return "white"
+				end
+			end
+			return pick(c.rng, "black", 5, "dark", 1)
+		end,
+		decor = {
+			{ kind = "fangs", color = "orange", length = 1, spots = { { 0, 0.42 } } },
+		},
+		stand = { color = "stand" },
+	},
+	{
+		id = "neon",
+		element = { "electrico", "oscuro" },
+		name = "Neón",
+		palette = {
+			base = { 40, 85, 110 },
+			pink = { 255, 90, 170, neon = true, glass = 0.15 },
+			green = { 150, 255, 80, neon = true, glass = 0.15 },
+			cyan = { 70, 220, 255, neon = true, glass = 0.15 },
+			yellow = { 255, 230, 80, neon = true, glass = 0.15 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			-- Franjas de neón en diagonal sobre un fondo oscuro.
+			local d = (c.theta * 4 + c.t * 6 + c.noise(0.3)) % 4
+			if d < 0.8 then
+				return "pink"
+			elseif d < 1.5 then
+				return "base"
+			elseif d < 2.3 then
+				return "cyan"
+			elseif d < 3 then
+				return "base"
+			elseif d < 3.5 then
+				return "green"
+			end
+			return if c.t < -0.3 then "yellow" else "green"
+		end,
+		stand = { color = "stand" },
+		fx = { light = { 180, 120, 255, 14, 1 } },
+	},
+	{
+		id = "serpiente_cascabel",
+		element = { "oscuro", "naturaleza" },
+		name = "Serpiente de Cascabel",
+		palette = {
+			green = { 60, 140, 70 },
+			light = { 110, 180, 110 },
+			white = { 230, 235, 225 },
+			dark = { 35, 85, 45 },
+			rattle = { 225, 190, 100 },
+			stand = { 225, 235, 240, glass = 0.5 },
+		},
+		paint = function(c)
+			-- Serpiente enroscada al frente, con el cascabel abajo.
+			if c.front and c.z < -1.5 then
+				local du, dv = c.u, c.v + 0.5
+				local r = math.sqrt(du * du + dv * dv)
+				local turn = math.atan2(dv, du) / (2 * math.pi)
+				if r < 5.5 and (turn + r / 2.8) % 1 < 0.35 then
+					return "dark"
+				end
+				if c.v < -5.5 and math.abs(c.u) < 3 then
+					return "rattle"
+				end
+			end
+			return pick(c.rng, "green", 4, "light", 2, "white", 1)
+		end,
+		stand = { color = "stand" },
+	},
+	{
+		id = "fuego_oscuro",
+		element = { "oscuro", "llama" },
+		name = "Fuego Oscuro",
+		palette = {
+			black = { 25, 25, 30 },
+			gray = { 75, 75, 80 },
+			purple = { 110, 70, 165 },
+			white = { 235, 235, 235 },
+		},
+		paint = function(c)
+			-- Tres brazos violetas que giran.
+			local du, dv = c.u, c.v + 1
+			local r = math.sqrt(du * du + dv * dv)
+			local turn = math.atan2(dv, du) / (2 * math.pi)
+			if (turn * 3 + r / 3) % 1 < 0.32 and r > 0.8 then
+				return "purple"
+			end
+			return if c.noise(0.35) > 0 then "gray" else "black"
+		end,
+		decor = {
+			{ kind = "fangs", color = "white", length = 0.9, spots = { { -40, 0.7 }, { -35, 0.6 }, { -30, 0.5 } } },
+		},
+	},
+	{
+		id = "vampiro",
+		element = { "llama", "oscuro" },
+		name = "Vampiro",
+		palette = {
+			yellow = { 250, 205, 40 },
+			orange = { 245, 130, 30 },
+			red = { 200, 35, 30 },
+			dark = { 140, 20, 25 },
+			gold = { 225, 175, 70, shine = 0.15 },
+			ruby = { 220, 30, 50, glass = 0.15 },
+		},
+		paint = function(c)
+			local n = c.noise(0.4) + c.noise(0.9, 1) * 0.4
+			if n > 0.25 then
+				return "yellow"
+			elseif n > 0 then
+				return "orange"
+			elseif n > -0.3 then
+				return "red"
+			end
+			return "dark"
+		end,
+		decor = {
+			{ kind = "necklace", color = "gold", gem = "ruby", t = -0.05, drop = 0, links = 26 },
+		},
+		fx = { light = { 255, 90, 40, 12, 1 } },
+	},
+	{
+		id = "veneno",
+		element = { "terra", "oscuro" },
+		name = "Veneno",
+		palette = {
+			red = { 175, 25, 35 },
+			dark = { 130, 15, 25 },
+			lime = { 200, 230, 50 },
+			green = { 40, 160, 60 },
+		},
+		paint = function(c)
+			if math.abs(c.noise(0.35)) < 0.05 or math.abs(c.noise(0.5, 3)) < 0.03 then
+				return "lime" -- venas
+			end
+			return pick(c.rng, "red", 3, "dark", 2)
+		end,
+		decor = {
+			{ kind = "spines", count = 18, colors = { "green" }, length = 1.2 },
+		},
+	},
+	{
+		id = "erizo",
+		element = { "terra", "oscuro" },
+		name = "Erizo",
+		palette = {
+			brown = { 120, 65, 35 },
+			orange = { 175, 100, 50 },
+			dark = { 85, 45, 25 },
+			black = { 25, 25, 25 },
+			tan = { 190, 145, 100 },
+		},
+		paint = function(c)
+			return pick(c.rng, "brown", 3, "orange", 2, "dark", 2)
+		end,
+		decor = {
+			{ kind = "spines", count = 26, colors = { "dark", "dark", "black" }, length = 1.3 },
+			{ kind = "snout", theta = 25, t = -0.35, color = "tan", nose = "black", ears = "tan" },
+		},
+	},
+	{
+		id = "oscuro",
+		element = "oscuro",
+		name = "Oscuro",
+		palette = {
+			black = { 22, 22, 25 },
+			dark = { 50, 52, 58 },
+		},
+		paint = function(c)
+			return pick(c.rng, "black", 6, "dark", 1)
+		end,
+		decor = {
+			{ kind = "fangs", color = "black", length = 1.4, ring = { t = 0.45, count = 8 } },
+		},
+	},
+	{
+		id = "bateria",
+		element = { "electrico", "metal" },
+		name = "Batería",
+		palette = {
+			brown = { 110, 60, 35 },
+			dark = { 80, 45, 30 },
+			yellow = { 250, 205, 30 },
+			orange = { 245, 160, 40 },
+			red = { 220, 40, 30 },
+			white = { 235, 235, 230 },
+			metal = { 160, 165, 170, shine = 0.4 },
+		},
+		paint = function(c)
+			-- Franja amarilla con un rayo rojo.
+			if c.t > -0.35 and c.t < 0.35 + math.sin(c.theta) * 0.1 then
+				if c.front and Paint.nearLine(c.u, c.v, { { 0.5, 4 }, { -1, 1 }, { 1, 0 }, { -0.5, -3 } }, 0.7) then
+					return "red"
+				end
+				return pick(c.rng, "yellow", 4, "orange", 1)
+			end
+			if c.t > 0.6 and c.noise(0.6) > 0.35 then
+				return "white"
+			end
+			return pick(c.rng, "brown", 3, "dark", 2)
+		end,
+		decor = {
+			{ kind = "cap", color = "metal" },
+		},
+		fx = { sparks = { 255, 230, 80 } },
+	},
+	{
+		id = "libelula",
+		element = { "naturaleza", "metal" },
+		name = "Libélula",
+		palette = {
+			dark = { 25, 60, 40 },
+			green = { 40, 150, 70 },
+			blue = { 50, 100, 140 },
+			eye = { 70, 160, 230, glass = 0.25 },
+			wing = { 150, 210, 245, glass = 0.45 },
+			black = { 25, 25, 25 },
+		},
+		paint = function(c)
+			local n = c.noise(0.45)
+			if n > 0.3 then
+				return "green"
+			elseif n < -0.35 then
+				return "blue"
+			end
+			return "dark"
+		end,
+		decor = {
+			{ kind = "domes", size = 3, colors = { "eye" }, spots = { { -30, 0.6 }, { 30, 0.6 } } },
+			{ kind = "insectWings", color = "wing", t = 0.35 },
+			{ kind = "horns", count = 2, colors = { "black" }, t = 0.9, length = 1.4 },
+		},
+	},
+	{
+		id = "jade",
+		element = { "naturaleza", "metal" },
+		name = "Jade",
+		tiles = 0.35,
+		palette = {
+			jade = { 145, 190, 160, shine = 0.1 },
+			mint = { 180, 215, 190, shine = 0.1 },
+			deep = { 110, 160, 125, shine = 0.1 },
+			olive = { 175, 180, 120, shine = 0.1 },
+			gray = { 150, 155, 150 },
+		},
+		paint = function(c)
+			if math.abs(c.t + 0.05) < 0.08 then
+				return "olive"
+			end
+			return pick(c.rng, "jade", 4, "mint", 2, "deep", 2, "gray", 0.5)
+		end,
+	},
+	{
+		id = "concha",
+		element = { "mar", "metal" },
+		name = "Concha",
+		palette = {
+			cream = { 240, 230, 200 },
+			pink = { 245, 175, 200 },
+			lilac = { 210, 180, 235 },
+			blue = { 160, 205, 240 },
+		},
+		paint = function(c)
+			if c.t > -0.3 and c.t < 0.3 then
+				return pick(c.rng, "pink", 3, "lilac", 2, "blue", 1, "cream", 1)
+			end
+			return pick(c.rng, "cream", 5, "pink", 1)
+		end,
+		decor = {
+			{ kind = "dots", count = 14, size = 1.4, colors = { "blue", "lilac", "pink" } },
+		},
+	},
+	{
+		id = "mercurio",
+		element = { "mar", "metal" },
+		name = "Mercurio",
+		palette = {
+			silver = { 150, 155, 162, shine = 0.35 },
+			gray = { 105, 108, 115, shine = 0.3 },
+			light = { 190, 192, 198, shine = 0.4 },
+			black = { 35, 35, 40 },
+			blue = { 40, 120, 230, glass = 0.2, neon = true },
+		},
+		paint = function(c)
+			if c.rng:NextNumber() < 0.05 then
+				return "blue"
+			end
+			return pick(c.rng, "silver", 4, "gray", 3, "light", 2, "black", 1)
+		end,
+		decor = {
+			{ kind = "domes", size = 2.4, colors = { "silver", "gray" }, spots = { { 40, 0.85 }, { 60, 0.65 }, { 70, 0.45 } } },
+		},
+	},
+	{
+		id = "cristal",
+		element = "leyenda",
+		name = "Cristal",
+		palette = {
+			blue = { 40, 120, 220 },
+			cyan = { 50, 185, 220 },
+			sky = { 110, 200, 240 },
+			clear = { 220, 240, 255, glass = 0.5 },
+		},
+		paint = function(c)
+			return pick(c.rng, "blue", 3, "cyan", 3, "sky", 1, "clear", 1)
+		end,
+		decor = {
+			{ kind = "shards", count = 12, colors = { "clear" }, size = 1.1 },
+		},
+		fx = { sparkles = { 200, 240, 255 } },
+	},
+	{
+		id = "popo",
+		element = { "terra", "mar", "oscuro" },
+		name = "Popó",
+		palette = {
+			brown = { 115, 60, 35 },
+			light = { 150, 85, 50 },
+			dark = { 85, 45, 28 },
+		},
+		paint = function(c)
+			-- Anillos como una montañita.
+			return if math.floor((c.t + 1) * 4 + math.sin(c.theta) * 0.3) % 2 == 0 then pick(c.rng, "brown", 3, "dark", 1) else pick(c.rng, "light", 3, "brown", 1)
+		end,
+		decor = {
+			{ kind = "domes", size = 1.4, colors = { "brown" }, spots = { { 0, 0.97 } } },
+		},
+	},
+	{
+		id = "legendario",
+		element = "leyenda",
+		name = "Legendario",
+		palette = {
+			red = { 215, 40, 40 },
+			orange = { 245, 140, 40 },
+			yellow = { 250, 215, 40 },
+			lime = { 160, 210, 50 },
+			green = { 40, 165, 70 },
+			blue = { 40, 110, 210 },
+			purple = { 120, 70, 190 },
+			white = { 245, 248, 252 },
+			cloud = { 190, 220, 245 },
+			star = { 250, 240, 170 },
+		},
+		paint = function(c)
+			-- Arcoíris de abajo hacia arriba, con una nube blanca arriba.
+			if c.t > 0.5 and c.u > 0 and c.front then
+				return pick(c.rng, "white", 2, "cloud", 1)
+			end
+			local bands = { "red", "orange", "yellow", "lime", "green", "blue", "purple" }
+			return bands[math.clamp(math.floor((c.t + 1) / 2 * 7) + 1, 1, 7)]
+		end,
+		decor = {
+			{ kind = "flakes", color = "star", size = 0.45, arms = 5, spots = { { -40, 0.35 }, { 10, 0.3 }, { 35, 0.55 }, { -15, -0.25 }, { 45, -0.1 }, { -60, 0.05 }, { 70, 0.4 } } },
+		},
+		fx = { sparkles = { 255, 245, 180 } },
+	},
+	{
+		id = "platino",
+		element = { "metal", "hielo" },
+		name = "Platino",
+		palette = {
+			silver = { 185, 188, 195, shine = 0.35 },
+			light = { 215, 218, 222, shine = 0.4 },
+			gray = { 140, 143, 150, shine = 0.3 },
+			red = { 230, 50, 50, neon = true },
+			blue = { 60, 140, 255, neon = true },
+		},
+		paint = function(c)
+			if c.front and math.abs(c.u) < 0.6 then
+				return "gray" -- costura del frente
+			end
+			return pick(c.rng, "silver", 4, "light", 2, "gray", 1)
+		end,
+		decor = {
+			{ kind = "dots", count = 4, size = 0.6, colors = { "red", "blue" }, avoidFront = true },
+			{ kind = "flakes", color = "gray", size = 0.45, arms = 8, spots = { { 35, 0.1 } } },
+		},
+	},
+	{
+		id = "petroleo",
+		element = { "mar", "oscuro" },
+		name = "Petróleo",
+		palette = {
+			black = { 22, 22, 25, shine = 0.2 },
+			dark = { 55, 58, 65, shine = 0.2 },
+			slate = { 85, 90, 100 },
+			cap = { 30, 30, 32 },
+			ring = { 170, 175, 180, shine = 0.4 },
+		},
+		paint = function(c)
+			if math.abs(c.t + 0.1) < 0.09 then
+				return "slate"
+			end
+			return pick(c.rng, "black", 5, "dark", 2)
+		end,
+		decor = {
+			{ kind = "cap", color = "ring", ring = "cap" },
+		},
+	},
+	{
+		id = "pirata",
+		element = { "oscuro", "mar" },
+		name = "Pirata",
+		palette = {
+			skin = { 130, 70, 40 },
+			dark = { 105, 55, 35 },
+			black = { 25, 25, 28 },
+			white = { 240, 240, 235 },
+			blue = { 40, 70, 140 },
+			red = { 180, 40, 35 },
+			gold = { 235, 185, 45, shine = 0.2 },
+		},
+		paint = function(c)
+			if c.t > 0.5 then
+				-- Sombrero negro con la calavera blanca.
+				if c.front and math.abs(c.u) < 1.2 and c.v > 5.5 and c.v < 7.5 then
+					return "white"
+				end
+				return "black"
+			end
+			if c.front then
+				if math.abs(c.v - 2.5 - c.u * 0.35) < 0.6 then
+					return "black" -- parche
+				elseif math.abs(c.v + 1) < 0.6 and math.abs(c.u) < 2.5 then
+					return "black" -- bigote
+				elseif c.v < -4.5 and c.v > -6 and math.abs(c.u) < 1 then
+					return "gold" -- hebilla
+				end
+			end
+			if c.t < -0.45 and c.t > -0.7 then
+				return pick(c.rng, "blue", 3, "red", 1)
+			end
+			return pick(c.rng, "skin", 3, "dark", 1)
+		end,
+	},
+	{
+		id = "planta_carnivora",
+		element = { "naturaleza", "oscuro" },
+		name = "Planta Carnívora",
+		palette = {
+			red = { 210, 35, 35 },
+			dark = { 160, 25, 30 },
+			green = { 40, 150, 60 },
+			lime = { 140, 200, 60 },
+			white = { 245, 240, 225 },
+		},
+		paint = function(c)
+			if c.t > 0.15 then
+				return pick(c.rng, "green", 3, "lime", 2)
+			end
+			return pick(c.rng, "red", 4, "dark", 1)
+		end,
+		decor = {
+			{ kind = "fangs", color = "white", length = 1.4, ring = { t = 0.72, count = 9 } },
+			{ kind = "leaves", color = "green", tip = "lime", clusters = { { theta = -80, t = 0.3, count = 3 }, { theta = 60, t = 0.85, count = 2 } } },
+		},
+	},
+	{
+		id = "perla",
+		element = { "hielo", "metal" },
+		name = "Perla",
+		tiles = 0.35,
+		palette = {
+			white = { 245, 245, 242, shine = 0.25 },
+			cream = { 235, 228, 210, shine = 0.25 },
+			gray = { 210, 212, 215, shine = 0.25 },
+		},
+		paint = function(c)
+			return pick(c.rng, "white", 4, "cream", 2, "gray", 1)
+		end,
+		fx = { sparkles = { 255, 250, 235 } },
+	},
+	{
+		id = "oro",
+		element = { "metal", "electrico" },
+		name = "Oro",
+		tiles = 0.35,
+		palette = {
+			gold = { 235, 180, 40, shine = 0.3 },
+			light = { 245, 205, 80, shine = 0.3 },
+			deep = { 215, 145, 40, shine = 0.3 },
+		},
+		paint = function(c)
+			if c.t < -0.2 then
+				return pick(c.rng, "deep", 3, "gold", 2)
+			end
+			return pick(c.rng, "gold", 4, "light", 2, "deep", 1)
+		end,
+		fx = { sparkles = { 255, 225, 120 } },
+	},
+	{
+		id = "robot",
+		element = { "llama", "metal" },
+		name = "Robot",
+		palette = {
+			steel = { 140, 160, 185, shine = 0.25 },
+			light = { 175, 190, 210, shine = 0.25 },
+			gray = { 110, 120, 135, shine = 0.2 },
+			dark = { 60, 65, 75 },
+			lens = { 40, 160, 255, neon = true, glass = 0.1 },
+		},
+		paint = function(c)
+			if c.rng:NextNumber() < 0.04 then
+				return "dark" -- rejillas
+			end
+			return pick(c.rng, "steel", 4, "light", 2, "gray", 2)
+		end,
+		decor = {
+			{ kind = "domes", size = 2.2, colors = { "lens" }, spots = { { -35, 0.45 } } },
+			{ kind = "dots", count = 5, size = 0.6, colors = { "lens" }, avoidFront = true },
+			{ kind = "flakes", color = "gray", size = 0.6, arms = 8, spots = { { 80, 0.1 } } },
+		},
+	},
+	{
+		id = "steampunk",
+		element = { "llama", "metal" },
+		name = "Steampunk",
+		palette = {
+			brass = { 200, 160, 70, shine = 0.2 },
+			bronze = { 180, 120, 60, shine = 0.2 },
+			copper = { 205, 120, 75, shine = 0.35 },
+			gold = { 225, 185, 60, shine = 0.3 },
+			gear = { 150, 90, 50, shine = 0.2 },
+			red = { 220, 50, 40, neon = true },
+		},
+		paint = function(c)
+			if c.t > 0.45 then
+				return "copper" -- cúpula de cobre
+			end
+			return pick(c.rng, "brass", 3, "bronze", 2, "gold", 1)
+		end,
+		decor = {
+			{ kind = "flakes", color = "gear", size = 1, arms = 10, spots = { { -70, -0.05 } } },
+			{ kind = "horns", count = 1, colors = { "gold" }, t = 0.8, length = 2.6 },
+			{ kind = "domes", size = 1.3, colors = { "red" }, spots = { { -45, 0.6 } } },
+		},
+	},
+	{
+		id = "medieval",
+		element = { "llama", "metal" },
+		name = "Medieval",
+		palette = {
+			red = { 215, 30, 30 },
+			orange = { 240, 110, 30 },
+			dark = { 170, 25, 25 },
+			helmet = { 190, 192, 198, shine = 0.3 },
+			slot = { 70, 72, 80 },
+		},
+		paint = function(c)
+			-- Casco de caballero arriba, con la rejilla al frente.
+			if c.t > 0.35 then
+				if c.front and c.t < 0.6 and math.floor(c.x) % 2 == 0 then
+					return "slot"
+				end
+				return "helmet"
+			end
+			return pick(c.rng, "red", 4, "orange", 1, "dark", 1)
+		end,
+		decor = {
+			{ kind = "flakes", color = "helmet", size = 0.8, arms = 8, spots = { { -85, 0.35 } } },
+		},
+	},
 }
 
 Eggs.byId = {}

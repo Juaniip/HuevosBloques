@@ -45,6 +45,7 @@ local function resolvePalette(raw)
 			color = Color3.fromRGB(entry[1], entry[2], entry[3]),
 			neon = entry.neon,
 			glass = entry.glass,
+			shine = entry.shine,
 		}
 	end
 	return palette
@@ -170,6 +171,7 @@ function EggBuilder.build(def, parent: Instance?, cframe: CFrame?): Model
 		part.Color = entry.color
 		part.Material = if entry.neon then Enum.Material.Neon else Enum.Material.Plastic
 		part.Transparency = entry.glass or 0
+		part.Reflectance = entry.shine or 0
 		part.TopSurface = Enum.SurfaceType.Smooth
 		part.BottomSurface = Enum.SurfaceType.Smooth
 		if rng:NextNumber() >= tileChance then

@@ -12,7 +12,7 @@ rojo serve
 En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo → Connect**) y dale a **Play**.
 
 - Usa el Kit de `../RobloxDev/Kit/src`, así que las dos carpetas tienen que estar juntas en el escritorio.
-- Los huevos están en ronda alrededor del punto de aparición. El que tenés cerca gira solo para que lo veas de todos lados.
+- Los huevos están en anillos alrededor del punto de aparición. El que tenés cerca gira solo para que lo veas de todos lados.
 
 ## Los huevos
 
@@ -53,6 +53,15 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | 🍨 Helado | Rojo abajo, crema que chorrea arriba y una cereza |
 | 🌼 Diente de León | Blanco y gris claro, con semillitas que vuelan |
 | 🍹 Mojito | De amarillo a verde oscuro, con hojas de menta arriba |
+| Puro Fuego / Pura Tierra / Puro | Collar dorado con medallón; cuernos, colmillos o nubes, sobre pie transparente |
+| Espejo, Platino, Mercurio, Perla, Oro | Ladrillos que brillan como metal (y lucecitas, tuercas o gotas) |
+| Viento, Zombi, Fósil, Pingüino, Neón | Remolino; cristales que cuelgan; ventana con huesos; panza blanca; franjas de neón |
+| Serpiente de Cascabel, Fuego Oscuro | Víbora enroscada al frente; brazos violetas que giran |
+| Vampiro, Veneno, Erizo, Oscuro | Lava con cinturón y rubí; venas y espinas verdes; púas y hocico; púas negras |
+| Batería, Petróleo | Franja con rayo y tapa de metal; negro con tapa de botella |
+| Libélula, Jade, Concha, Cristal | Ojos y alas transparentes; jade; conchitas pastel; cristales que salen |
+| Popó, Legendario, Pirata, Planta Carnívora | Anillos marrones; arcoíris con nube y estrellas; sombrero, parche y bigote; boca con dientes y hojas |
+| Robot, Steampunk, Medieval | Lente azul y luces; cúpula de cobre, engranaje y caño; casco de caballero |
 
 ## Íconos de los elementos
 
@@ -64,6 +73,12 @@ Roblox no lee imágenes desde la carpeta del proyecto: hay que subirlas una vez.
 
 Mientras un id esté vacío, la etiqueta muestra el elemento sin ícono.
 
+- `assets/elementos/`: los íconos propios (Alma, Guerra, Mar, Puro, Terra, Tiempo, Viento).
+- `assets/elementos/provisorios/`: los que todavía son del juego original. Hay que reemplazarlos antes de publicar.
+- `assets/monedas/`: oro, gema, comida y xp, para la interfaz que viene.
+
+Los PNG salen de las imágenes de `Escritorio/Huevos` con el fondo blanco recortado.
+
 ## Cómo está hecho
 
 | Archivo | Qué hace |
@@ -73,8 +88,8 @@ Mientras un id esté vacío, la etiqueta muestra el elemento sin ícono.
 | `src/shared/EggDecor.luau` | Adornos: aletas, espinas, brazo de cactus, coral, estrella, hojas, cúpulas, puntos, pie, copos, pinos, cuernos, visor, corona, alas, flor de loto y mariposas |
 | `src/shared/Paint.luau` | Ayudas para pintar (elegir color por peso, líneas, óvalos a los costados) |
 | `src/shared/Elements.luau` | Los 21 elementos (Terra, Llama, Mar, Naturaleza...), sus colores y los ids de sus íconos |
-| `assets/elementos/` | Íconos de los elementos en PNG, listos para subir a Roblox |
-| `src/server/Main.server.luau` | La galería y las etiquetas arriba de cada huevo |
+| `assets/` | Íconos de elementos y monedas en PNG, listos para subir a Roblox |
+| `src/server/Main.server.luau` | La galería (huevos en anillos) y las etiquetas arriba de cada huevo |
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
 | `src/client/Labels.client.luau` | Anima las etiquetas: letras en ola, cartel que flota y colores que giran |
 

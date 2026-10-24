@@ -1,4 +1,4 @@
--- Galería: todos los huevos en ronda, cada uno en su pedestal mirando al centro, con su etiqueta arriba.
+-- Galería: todos los huevos en anillos, cada uno en su pedestal mirando al centro, con su etiqueta arriba.
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -10,7 +10,9 @@ local Elements = require(ReplicatedStorage.Shared.Elements)
 local Parts = Kit.Parts
 local Ui = Kit.Ui
 
-local SPACING = 24 -- studs entre huevo y huevo
+local SPACING = 24 -- studs entre huevo y huevo, a lo largo del anillo
+local FIRST_RING = 50 -- radio del primer anillo
+local RING_GAP = 42 -- distancia entre anillos
 local PEDESTAL = 2
 local LABEL_GAP = 7 -- studs entre la punta del huevo y la etiqueta
 
@@ -172,12 +174,27 @@ local function label(pedestal: BasePart, egg: Model, def)
 	gui.Parent = anchor
 end
 
-local radius = math.max(60, #Eggs.list * SPACING / (2 * math.pi))
+-- Reparte los huevos en anillos alrededor del centro: cada anillo lleva los que le entran.
+local spots = {}
+do
+	local ring, left = 0, #Eggs.list
+	while left > 0 do
+		local radius = FIRST_RING + ring * RING_GAP
+		local count = math.min(left, math.floor(2 * math.pi * radius / SPACING))
+		local offset = ring * 0.5 -- cada anillo corrido, así no quedan uno detrás del otro
+		for i = 0, count - 1 do
+			local angle = (i + offset) / count * math.pi * 2
+			table.insert(spots, Vector3.new(math.sin(angle) * radius, 0, math.cos(angle) * radius))
+		end
+		left -= count
+		ring += 1
+	end
+end
+
 local started = os.clock()
 local total = 0
 for index, def in Eggs.list do
-	local angle = (index - 1) / #Eggs.list * math.pi * 2
-	local position = Vector3.new(math.sin(angle) * radius, 0, math.cos(angle) * radius)
+	local position = spots[index]
 	local facing = CFrame.lookAt(position, Vector3.zero) -- el frente del huevo (-Z) mira al centro
 
 	local pedestal = Parts.cylinder("Pedestal", PEDESTAL, 16, facing * CFrame.new(0, PEDESTAL / 2, 0), Color3.fromRGB(250, 250, 252), gallery)

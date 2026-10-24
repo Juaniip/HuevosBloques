@@ -23,6 +23,7 @@ local function style(part: BasePart, ctx, key: string): BasePart
 		part.Material = Enum.Material.Neon
 	end
 	part.Transparency = entry.glass or 0
+	part.Reflectance = entry.shine or 0
 	part.CanTouch = false
 	return part
 end
@@ -96,12 +97,18 @@ function EggDecor.dots(ctx, o)
 	end
 end
 
--- Cúpulas / piedras semienterradas: { count, colors, size?, tMin?, tMax? }
+-- Cúpulas / piedras semienterradas: { count, colors, size?, tMin?, tMax?, spots? (lugares fijos) }
 function EggDecor.domes(ctx, o)
 	local used = {}
 	local size = o.size or 2.6
-	for _ = 1, o.count or 6 do
-		local pos, normal = ctx.surface(randomSpot(ctx, used, 1.3, nil, o.tMin, o.tMax))
+	for i = 1, if o.spots then #o.spots else o.count or 6 do
+		local spot = o.spots and o.spots[i]
+		local pos, normal
+		if spot then
+			pos, normal = ctx.surface(spot[1], spot[2])
+		else
+			pos, normal = ctx.surface(randomSpot(ctx, used, 1.3, nil, o.tMin, o.tMax))
+		end
 		local key = choose(ctx, o.colors)
 		smooth(ctx, "Dome", Vector3.one * size, CFrame.new(pos - normal * size * 0.2), key, BALL)
 		smooth(ctx, "DomeStud", Vector3.new(0.3, 0.6, 0.6), frame(pos, normal) * AXIS * CFrame.new(size * 0.3 + 0.1, 0, 0), key, CYLINDER)
@@ -334,6 +341,101 @@ function EggDecor.cherry(ctx, o)
 	smooth(ctx, "Cherry", Vector3.one * 2.6, CFrame.new(0, top + 0.9, 0), o.color, BALL)
 	brick(ctx, "CherryBand", Vector3.new(2.7, 0.8, 2.7), CFrame.new(0, top + 0.9, 0), o.color)
 	smooth(ctx, "CherryStem", Vector3.new(1.8, 0.25, 0.25), CFrame.new(0.25, top + 2.8, 0) * CFrame.Angles(0, 0, math.rad(75)), o.stem, CYLINDER)
+end
+
+-- Collar o cinturón de eslabones con un dije al frente: { color, gem?, t?, drop?, links? }
+--   drop = cuánto baja al frente (0 = cinturón derecho)
+function EggDecor.necklace(ctx, o)
+	local links = o.links or 22
+	local base, drop = o.t or 0.45, o.drop or 0.3
+	for k = 0, links - 1 do
+		local theta = k * 360 / links
+		local t = base - drop * (math.cos(math.rad(theta)) + 1) / 2
+		local pos, normal = ctx.surface(theta, t)
+		local f = frame(pos, normal)
+		smooth(ctx, "Link", Vector3.new(0.9, 0.5, 0.35), f * CFrame.new(0, 0, -0.1) * CFrame.Angles(0, 0, if k % 2 == 0 then 0 else math.pi / 2), o.color)
+	end
+	local pos, normal = ctx.surface(0, base - drop - 0.12)
+	local f = frame(pos, normal) * CFrame.new(0, 0, -0.3)
+	smooth(ctx, "Pendant", Vector3.new(2.6, 2.6, 0.5), f * CFrame.Angles(0, 0, math.rad(45)), o.color)
+	smooth(ctx, "PendantRim", Vector3.new(0.3, 2.4, 2.4), f * AXIS * CFrame.new(0.2, 0, 0), o.color, CYLINDER)
+	if o.gem then
+		smooth(ctx, "Gem", Vector3.new(1.2, 1.7, 0.5), f * CFrame.new(0, 0, -0.25) * CFrame.Angles(0, 0, math.rad(45)), o.gem)
+	end
+end
+
+-- Colmillos o puntas que cuelgan / salen: { color, length?, down?, ring = { t, count }? , spots = { { theta, t } }? }
+function EggDecor.fangs(ctx, o)
+	local spots = o.spots or {}
+	if o.ring then
+		for k = 1, o.ring.count do
+			table.insert(spots, { (k - 1) * 360 / o.ring.count, o.ring.t })
+		end
+	end
+	local length = o.length or 1.4
+	local bend = if o.down then -0.8 else 0.8
+	for _, spot in spots do
+		local pos, normal = ctx.surface(spot[1], spot[2])
+		local dir = (normal + Vector3.yAxis * bend).Unit
+		local f = frame(pos, dir) * AXIS
+		smooth(ctx, "Fang", Vector3.new(length * 0.5, 0.7, 0.7), f * CFrame.new(length * 0.2, 0, 0), o.color, CYLINDER)
+		smooth(ctx, "FangTip", Vector3.new(length * 0.5, 0.35, 0.35), f * CFrame.new(length * 0.65, 0, 0), o.color, CYLINDER)
+	end
+end
+
+-- Hocico con nariz (y orejas si se pide): { theta?, t, color, nose, ears? }
+function EggDecor.snout(ctx, o)
+	local pos, normal = ctx.surface(o.theta or 0, o.t or -0.3)
+	local f = frame(pos, Vector3.new(normal.X, 0, normal.Z).Unit)
+	brick(ctx, "Snout", Vector3.new(2, 1.4, 1.6), f * CFrame.new(0, 0, -0.5), o.color)
+	smooth(ctx, "Nose", Vector3.new(0.4, 0.7, 0.7), f * AXIS * CFrame.new(1.4, 0.3, 0), o.nose, CYLINDER)
+	for _, side in { -1, 1 } do
+		smooth(ctx, "Eye", Vector3.new(0.3, 0.6, 0.6), f * CFrame.new(side * 1.3, 1.6, 0) * AXIS * CFrame.new(0.35, 0, 0), o.nose, CYLINDER)
+		if o.ears then
+			smooth(ctx, "Ear", Vector3.new(0.3, 1.2, 1.2), f * CFrame.new(side * 2.4, 1.2, 0.3) * AXIS * CFrame.new(0.3, 0, 0), o.ears, CYLINDER)
+		end
+	end
+end
+
+-- Tapa en la punta (pila, botella): { color, ring? }
+function EggDecor.cap(ctx, o)
+	local top = ctx.baseY + ctx.height
+	smooth(ctx, "Cap", Vector3.new(1.2, 3, 3), CFrame.new(0, top + 0.2, 0) * UPRIGHT, o.color, CYLINDER)
+	smooth(ctx, "CapTop", Vector3.new(0.4, 2.2, 2.2), CFrame.new(0, top + 0.95, 0) * UPRIGHT, o.ring or o.color, CYLINDER)
+end
+
+-- Cristales que salen de la cáscara: { count, colors, size? }
+function EggDecor.shards(ctx, o)
+	local used = {}
+	local size = o.size or 1
+	for _ = 1, o.count or 8 do
+		local pos, normal = ctx.surface(randomSpot(ctx, used, 0.8))
+		local tilt = CFrame.Angles(ctx.rng:NextNumber(-0.5, 0.5), ctx.rng:NextNumber(-0.5, 0.5), ctx.rng:NextNumber(0, math.pi))
+		smooth(ctx, "Shard", Vector3.new(0.9, 0.9, 2.2) * size, frame(pos, normal) * tilt * CFrame.new(0, 0, -0.6 * size), choose(ctx, o.colors))
+	end
+end
+
+-- Orejitas o alitas chatas arriba, a los costados: { color, t?, size? }
+function EggDecor.flaps(ctx, o)
+	local s = o.size or 1
+	for _, side in { -1, 1 } do
+		local pos, normal = ctx.surface(side * 70, o.t or 0.75)
+		local f = frame(pos, Vector3.new(normal.X, 0, normal.Z).Unit) * CFrame.Angles(math.rad(40), 0, 0)
+		for i, spec in { { 2.4, 1.4, 0 }, { 1.6, 1, 1.1 }, { 0.9, 0.7, 2 } } do
+			smooth(ctx, "Flap", Vector3.new(spec[1] * s, 0.3, spec[2] * s), f * CFrame.new(side * i * 0.3 * s, 0, -(0.6 + spec[3]) * s), o.color)
+		end
+	end
+end
+
+-- Alas de insecto transparentes (dos por lado): { color, t? }
+function EggDecor.insectWings(ctx, o)
+	for _, side in { -1, 1 } do
+		local pos = ctx.surface(side * 90, o.t or 0.3)
+		for i, angle in { 25, -15 } do
+			local wing = CFrame.new(pos) * CFrame.Angles(0, 0, side * math.rad(angle)) * CFrame.new(side * 3, 0, 0)
+			smooth(ctx, "InsectWing", Vector3.new(6 - i, 0.25, 1.8), wing, o.color)
+		end
+	end
 end
 
 -- Pie donde se apoya el huevo. Devuelve su alto (el huevo empieza arriba).
