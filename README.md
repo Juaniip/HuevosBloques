@@ -80,17 +80,21 @@ tres monedas (el número sube contando).
 
 Roblox no lee imágenes desde la carpeta del proyecto: hay que subirlas una vez.
 
-1. En Studio: **View → Asset Manager → Bulk Import** y elegí los PNG de `assets/elementos`.
+1. En Studio: **Ventana → Administrador de recursos → Importación masiva** y elegí los PNG de `assets/elementos`.
 2. Click derecho en cada imagen → **Copy Asset ID**.
 3. Pegá cada id en la tabla `ICONS` de `src/shared/Elements.luau` (por ejemplo `llama = "123456789"`).
 
 Mientras un id esté vacío, la etiqueta muestra el elemento sin ícono.
 
-- `assets/elementos/`: los íconos propios (Alma, Guerra, Mar, Puro, Terra, Tiempo, Viento).
-- `assets/elementos/provisorios/`: los que todavía son del juego original. Hay que reemplazarlos antes de publicar.
-- `assets/monedas/`: oro, gema, comida y xp, para la interfaz que viene.
+- `assets/elementos/`: las 21 banderas de elementos.
+- `assets/monedas/`: oro, gema, comida y xp.
 
-Los PNG salen de las imágenes de `Escritorio/Huevos` con el fondo blanco recortado.
+Los PNG salen de las imágenes de `Escritorio/Huevos/Elementos` y `/Monedas` con el fondo blanco
+recortado. Si cambiás o agregás alguna, volvé a generarlos con:
+
+```bash
+python tools/recortar.py
+```
 
 ## Cómo está hecho
 

@@ -2,10 +2,10 @@
 --   Elements.byId.llama -> { name = "Llama", color, light, dark, icon }
 --   Elements.of(huevo)  -> los elementos del huevo (uno o dos)
 --
--- Íconos: los propios están en assets/elementos; los que todavía son del juego original están en
--- assets/elementos/provisorios (hay que reemplazarlos antes de publicar). Roblox no los toma desde
--- la carpeta: hay que subirlos (Studio → View → Asset Manager → Bulk Import) y pegar el id de cada
--- uno en ICONS. Mientras un id esté vacío, la etiqueta se muestra sin ícono.
+-- Íconos: las banderas diseñadas están en assets/elementos (se generan con tools/recortar.py).
+-- Roblox solo muestra imágenes subidas a Roblox: subilas una vez (Studio → Ventana → Administrador
+-- de recursos → Importación masiva) y pegá el id de cada una en ICONS. Mientras un id esté vacío,
+-- la etiqueta se muestra sin ícono.
 local Elements = {}
 
 local ICONS = {
