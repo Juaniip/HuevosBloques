@@ -67,7 +67,8 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
 | `src/client/Labels.client.luau` | Anima las etiquetas: letras en ola, cartel que flota y colores que giran |
 
-**Agregar un huevo:** copiá uno de `Eggs.list` y cambiale el `id`, el `element`, la paleta y la función `paint`.
+**Agregar un huevo:** copiá uno de `Eggs.list` y cambiale el `id`, el `element` (uno, o dos como
+`{ "fuego", "hielo" }`), la paleta y la función `paint`.
 `paint(c)` recibe la posición de cada ladrillo (`c.t` = altura de -1 a 1, `c.u`/`c.v` = posición
 sobre el frente, `c.noise` = manchas) y devuelve el nombre de un color de la paleta. La forma del
 huevo (ancho, capas, qué tan panzón) está en `EggBuilder.Shape`.

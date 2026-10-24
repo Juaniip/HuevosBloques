@@ -28,10 +28,12 @@ local gallery = Instance.new("Folder")
 gallery.Name = "Gallery"
 gallery.Parent = workspace
 
--- Etiqueta con el nombre (una letra por TextLabel, así el cliente las hace saltar en ola) y el
--- elemento arriba, con los colores del elemento. La animación está en Labels.client.luau.
+-- Etiqueta con el nombre (una letra por TextLabel, así el cliente las hace saltar en ola) y los
+-- elementos arriba, con sus colores: si son dos, el cartel va mitad y mitad.
+-- La animación está en Labels.client.luau.
 local function label(pedestal: BasePart, egg: Model, def)
-	local element = Elements.byId[def.element] or Elements.byId.normal
+	local elements = Elements.of(def)
+	local element, second = elements[1], elements[#elements]
 	local box, size = egg:GetBoundingBox()
 
 	local anchor = Instance.new("Attachment")
@@ -60,11 +62,18 @@ local function label(pedestal: BasePart, egg: Model, def)
 	Ui.new("UIStroke", { Color = element.dark, Thickness = 3, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = plate })
 	Ui.new("UIGradient", {
 		Name = "Colors",
-		Color = ColorSequence.new({
-			ColorSequenceKeypoint.new(0, element.light),
-			ColorSequenceKeypoint.new(0.5, element.color),
-			ColorSequenceKeypoint.new(1, element.dark),
-		}),
+		Color = if second ~= element
+			then ColorSequence.new({
+				ColorSequenceKeypoint.new(0, element.light),
+				ColorSequenceKeypoint.new(0.42, element.color),
+				ColorSequenceKeypoint.new(0.58, second.color),
+				ColorSequenceKeypoint.new(1, second.light),
+			})
+			else ColorSequence.new({
+				ColorSequenceKeypoint.new(0, element.light),
+				ColorSequenceKeypoint.new(0.5, element.color),
+				ColorSequenceKeypoint.new(1, element.dark),
+			}),
 		Parent = plate,
 	})
 	Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 18), PaddingRight = UDim.new(0, 18), Parent = plate })
@@ -99,22 +108,40 @@ local function label(pedestal: BasePart, egg: Model, def)
 		Ui.new("UIStroke", { Color = element.dark, Thickness = 2.5, Parent = holder:FindFirstChild("Char") })
 	end
 
-	local tag = Ui.new("TextLabel", {
-		Name = "Element",
+	-- Una plaquita por elemento, una al lado de la otra.
+	local tags = Ui.new("Frame", {
+		Name = "Elements",
 		AnchorPoint = Vector2.new(0.5, 0),
 		Position = UDim2.fromScale(0.5, 0),
 		Size = UDim2.fromOffset(0, 30),
 		AutomaticSize = Enum.AutomaticSize.X,
-		BackgroundColor3 = element.dark,
-		Font = Enum.Font.FredokaOne,
-		TextSize = 20,
-		TextColor3 = element.light,
-		Text = string.upper(element.name),
+		BackgroundTransparency = 1,
 		Parent = gui,
 	})
-	Ui.round(tag, 10)
-	Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12), Parent = tag })
-	Ui.new("UIStroke", { Color = element.color, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = tag })
+	Ui.new("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		Padding = UDim.new(0, 6),
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Parent = tags,
+	})
+	for order, each in elements do
+		local tag = Ui.new("TextLabel", {
+			Name = "Element",
+			LayoutOrder = order,
+			Size = UDim2.fromOffset(0, 30),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundColor3 = each.dark,
+			Font = Enum.Font.FredokaOne,
+			TextSize = 20,
+			TextColor3 = each.light,
+			Text = string.upper(each.name),
+			Parent = tags,
+		})
+		Ui.round(tag, 10)
+		Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12), Parent = tag })
+		Ui.new("UIStroke", { Color = each.color, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Parent = tag })
+	end
 
 	gui.Parent = anchor
 end

@@ -1,5 +1,6 @@
 -- Elementos de los huevos: el nombre y los colores de su etiqueta.
 --   Elements.byId.fuego -> { name = "Fuego", color, light, dark }
+--   Elements.of(huevo)  -> los elementos del huevo (uno o dos)
 local Elements = {}
 
 Elements.list = {
@@ -17,6 +18,19 @@ Elements.list = {
 	{ id = "magico", name = "Mágico", color = { 200, 70, 220 }, light = { 120, 230, 255 }, dark = { 80, 20, 120 } },
 	{ id = "normal", name = "Normal", color = { 175, 175, 175 }, light = { 250, 250, 250 }, dark = { 60, 60, 60 } },
 }
+
+-- Lista de elementos de un huevo (acepta "fuego" o { "fuego", "hielo" }).
+function Elements.of(def): { any }
+	local ids = if type(def.element) == "table" then def.element else { def.element }
+	local list = {}
+	for _, id in ids do
+		table.insert(list, Elements.byId[id] or error(`[Elements] no existe el elemento "{tostring(id)}"`))
+	end
+	if #list == 0 then
+		table.insert(list, Elements.byId.normal)
+	end
+	return list
+end
 
 Elements.byId = {}
 for _, element in Elements.list do
