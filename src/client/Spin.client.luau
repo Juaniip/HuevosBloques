@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local SPEED = 0.5 -- radianes por segundo
-local RANGE = 45 -- studs
+local RANGE = 25 -- studs
 
 local gallery = workspace:WaitForChild("Gallery")
 local homes: { [Model]: CFrame } = {}

@@ -5,7 +5,7 @@ local RunService = game:GetService("RunService")
 
 local Kit = require(ReplicatedStorage.Kit)
 
-local RANGE = 160 -- studs (igual que el MaxDistance de la etiqueta)
+local RANGE = 70 -- studs (igual que el MaxDistance de la etiqueta)
 
 local gallery = workspace:WaitForChild("Gallery")
 local labels: { [BillboardGui]: { chars: { TextLabel }, phase: number } } = {}
@@ -56,10 +56,10 @@ RunService.RenderStepped:Connect(function()
 		if not anchor or (anchor.WorldPosition - camera.CFrame.Position).Magnitude > RANGE then
 			continue
 		end
-		gui.StudsOffset = Vector3.new(0, math.sin(now * 1.6 + data.phase) * 0.5, 0)
+		gui.StudsOffset = Vector3.new(0, math.sin(now * 1.6 + data.phase) * 0.25, 0)
 		for i, char in data.chars do
 			local wave = math.sin(now * 5 - i * 0.55 + data.phase)
-			char.Position = UDim2.fromOffset(0, -math.max(wave, 0) * 8)
+			char.Position = UDim2.fromOffset(0, -math.max(wave, 0) * 4)
 			char.Rotation = wave * 6
 		end
 	end
