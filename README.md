@@ -67,8 +67,8 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 
 Cinco botones en el piso, delante de donde aparecés: pisás uno y recolectás una cantidad al azar de
 **gemas**, **oro**, **comida**, **XP** o **estrellas**. Sale un "+99" con el ícono y arriba al centro
-está la barra con gemas, oro y comida (el número sube contando). XP y estrellas se guardan igual,
-pero no van en la barra (`bar = false`).
+está la barra con gemas, oro, comida y estrellas (el número sube contando). La XP se guarda igual,
+pero no va en la barra (`bar = false`).
 
 - Cantidades y tiempo de espera de cada botón: `src/shared/Currencies.luau` (`pad = { min, max, cooldown }`).
 - Íconos: son las imágenes de `assets/monedas` (las de `Escritorio/Huevos/Monedas` sin el fondo).

@@ -1,4 +1,4 @@
--- Monedas del juego: gemas, oro y comida (las de la barra de arriba, en ese orden), XP y estrellas.
+-- Monedas del juego: gemas, oro, comida y estrellas (las de la barra de arriba, en ese orden) y XP.
 --   Currencies.byId.gold -> { id, name, color, icon, bar?, pad = { min, max, cooldown } }
 --   bar = false: se guarda y se recolecta, pero no aparece en la barra de arriba
 --   Currencies.format(1680000) -> "1.68 M"
@@ -47,7 +47,6 @@ Currencies.list = {
 		color = Color3.fromRGB(255, 215, 60),
 		file = "estrella.png",
 		icon = "91869186350550",
-		bar = false,
 		pad = { min = 1, max = 3, cooldown = 5 },
 	},
 }
