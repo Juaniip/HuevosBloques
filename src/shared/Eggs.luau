@@ -1,4 +1,4 @@
--- Los 16 huevos (las fotos de referencia están en Escritorio/Huevos).
+-- Todos los huevos (las fotos de referencia están en Escritorio/Huevos).
 --
 -- Cada huevo tiene:
 --   palette  colores por nombre: { r, g, b }, con neon = true o glass = transparencia si hace falta
@@ -13,6 +13,27 @@
 local Paint = require(script.Parent.Paint)
 
 local pick = Paint.pick
+
+-- Vértices de un icosaedro, girado para que un pentágono quede al frente (huevo Fútbol).
+local BALL_POINTS = {}
+do
+	local phi = (1 + math.sqrt(5)) / 2
+	local raw = {}
+	for _, a in { -1, 1 } do
+		for _, b in { -phi, phi } do
+			table.insert(raw, { 0, a, b })
+			table.insert(raw, { a, b, 0 })
+			table.insert(raw, { b, 0, a })
+		end
+	end
+	-- (0, 1, phi) pasa a mirar al frente (-Z), un poco hacia arriba.
+	local turn = math.atan2(0.15, -0.99) - math.atan2(1, phi)
+	for _, point in raw do
+		local m = math.sqrt(point[1] ^ 2 + point[2] ^ 2 + point[3] ^ 2)
+		local y, z = point[2] / m, point[3] / m
+		table.insert(BALL_POINTS, { point[1] / m, z * math.sin(turn) + y * math.cos(turn), z * math.cos(turn) - y * math.sin(turn) })
+	end
+end
 
 local Eggs = {}
 
@@ -443,6 +464,415 @@ Eggs.list = {
 			return pick(c.rng, "sky", 3, "pale", 3, "azure", 2, "white", 1, "clear", 1)
 		end,
 		fx = { sparkles = { 200, 240, 255 } },
+	},
+	{
+		id = "agua",
+		name = "Agua",
+		icon = "💧",
+		palette = {
+			navy = { 30, 60, 110 },
+			blue = { 30, 90, 170 },
+			royal = { 25, 115, 205 },
+			slate = { 70, 90, 125 },
+			glass = { 40, 150, 210, glass = 0.35 },
+			cyan = { 45, 175, 215 },
+			teal = { 45, 195, 170 },
+		},
+		paint = function(c)
+			-- Dos olas trenzadas que bajan, una al frente, atrás y a cada costado.
+			local a = ((math.deg(c.theta) + 45) % 90 - 45) / 9.5
+			if c.v > -7 and c.v < 5 then
+				local wave = math.sin(c.v * 0.75) * 1.3
+				if math.abs(a - wave) < 0.75 then
+					return "cyan"
+				elseif math.abs(a + wave - 0.4) < 0.75 then
+					return "teal"
+				end
+			end
+			if c.t > 0.8 then
+				return pick(c.rng, "blue", 2, "glass", 1, "royal", 1)
+			end
+			return pick(c.rng, "navy", 3, "blue", 4, "royal", 2, "slate", 1, "glass", 1)
+		end,
+	},
+	{
+		id = "barro",
+		name = "Barro",
+		icon = "🟤",
+		tiles = 0.15,
+		palette = {
+			mud = { 125, 75, 45 },
+			dark = { 85, 50, 32 },
+			reddish = { 105, 60, 40 },
+		},
+		paint = function(c)
+			return pick(c.rng, "mud", 5, "dark", 2, "reddish", 2)
+		end,
+	},
+	{
+		id = "nube",
+		name = "Nube",
+		icon = "☁️",
+		tiles = 0.45,
+		palette = {
+			white = { 245, 245, 245 },
+			pale = { 205, 222, 238 },
+			mist = { 185, 200, 225 },
+		},
+		paint = function(c)
+			local e = Paint.oval(c, 55, 2.3, 3.2, -1)
+			if e < 0.5 then
+				return "white"
+			elseif e < 1 then
+				return "pale"
+			elseif c.t > 0.75 or (c.t > 0.3 and c.t < 0.55) then
+				return "white"
+			elseif c.t > 0.55 then
+				return "pale"
+			elseif c.t < -0.55 then
+				return pick(c.rng, "pale", 2, "mist", 2)
+			end
+			return pick(c.rng, "white", 3, "pale", 2)
+		end,
+		decor = {
+			{ kind = "domes", count = 7, size = 2, colors = { "white", "pale" }, tMin = 0.35, tMax = 0.6 },
+		},
+	},
+	{
+		id = "picante",
+		name = "Picante",
+		icon = "🌶️",
+		palette = {
+			yellow = { 250, 205, 40 },
+			orange = { 240, 120, 30 },
+			red = { 200, 40, 30 },
+			dark = { 160, 30, 25 },
+			green = { 50, 150, 70 },
+		},
+		paint = function(c)
+			if c.t > 0.45 then
+				return pick(c.rng, "yellow", 5, "orange", 1)
+			elseif c.t > -0.25 then
+				return if c.noise(0.6) > 0.3 then "yellow" else "orange"
+			end
+			return pick(c.rng, "red", 4, "dark", 1)
+		end,
+		decor = {
+			{ kind = "leaves", color = "green", stem = "green", clusters = { { theta = -30, t = 0.97, count = 2 }, { theta = 120, t = 0.97, count = 2 } } },
+		},
+	},
+	{
+		id = "pajaro_fuego",
+		name = "Pájaro de Fuego",
+		icon = "🐦‍🔥",
+		palette = {
+			dark = { 160, 30, 25 },
+			red = { 205, 60, 35 },
+			orange = { 240, 120, 30 },
+			yellow = { 250, 210, 40 },
+		},
+		paint = function(c)
+			if c.t > -0.15 and c.t < 0.2 then
+				return pick(c.rng, "yellow", 3, "orange", 2, "dark", 0.5)
+			end
+			return pick(c.rng, "orange", 3, "dark", 3, "red", 1)
+		end,
+		fx = { sparks = { 255, 170, 60 } },
+	},
+	{
+		id = "mariposa",
+		name = "Mariposa",
+		icon = "🦋",
+		palette = {
+			yellow = { 250, 200, 40 },
+			orange = { 240, 140, 40 },
+			gold = { 235, 170, 40 },
+			pink = { 225, 70, 150 },
+			cyan = { 40, 170, 210 },
+			blue = { 45, 95, 200 },
+			teal = { 40, 165, 175 },
+		},
+		paint = function(c)
+			local n = c.noise(0.5)
+			if n > 0.35 then
+				return "pink"
+			elseif n < -0.4 then
+				return "cyan"
+			end
+			return pick(c.rng, "yellow", 4, "orange", 2, "gold", 1)
+		end,
+		decor = {
+			{ kind = "dots", count = 8, size = 0.8, colors = { "pink", "cyan" } },
+			{ kind = "butterflies", colors = { "blue", "teal" }, spots = { { -55, 0.8 }, { 55, 0.8 } } },
+		},
+	},
+	{
+		id = "nenufar",
+		name = "Nenúfar",
+		icon = "🪷",
+		palette = {
+			dark = { 30, 80, 45 },
+			green = { 45, 130, 65 },
+			mid = { 60, 150, 80 },
+			lime = { 160, 195, 70 },
+			pink = { 215, 70, 145 },
+			magenta = { 165, 30, 100 },
+		},
+		paint = function(c)
+			if c.row % 3 == 0 then
+				return pick(c.rng, "dark", 4, "green", 1)
+			end
+			return pick(c.rng, "green", 4, "mid", 1, "dark", 1)
+		end,
+		decor = {
+			{ kind = "lotus", leaf = "green", petals = "magenta", inner = "pink" },
+			{ kind = "dots", count = 4, size = 0.6, colors = { "lime" } },
+			{ kind = "flakes", color = "green", size = 0.7, spots = { { -95, 0 }, { 80, -0.15 } } },
+		},
+	},
+	{
+		id = "camaleon",
+		name = "Camaleón",
+		icon = "🦎",
+		palette = {
+			lime = { 150, 210, 50 },
+			pink = { 230, 70, 160 },
+			blue = { 40, 160, 220 },
+			yellow = { 250, 210, 40 },
+			orange = { 245, 130, 40 },
+			green = { 40, 170, 70 },
+			red = { 210, 40, 40 },
+		},
+		paint = function(c)
+			local e = Paint.oval(c, 52, 2.3, 3.4, -1)
+			if e < 0.25 then
+				return "orange"
+			elseif e < 0.5 then
+				return "green"
+			elseif e < 0.75 then
+				return "blue"
+			elseif e < 1 then
+				return "pink"
+			end
+			return pick(c.rng, "lime", 2, "pink", 2, "blue", 2, "yellow", 2, "orange", 1, "green", 1)
+		end,
+		decor = {
+			{ kind = "horns", count = 9, colors = { "lime", "lime", "yellow", "blue" }, t = 0.72 },
+		},
+	},
+	{
+		id = "paladin",
+		name = "Paladín",
+		icon = "🛡️",
+		palette = {
+			white = { 240, 240, 238 },
+			light = { 210, 214, 220 },
+			silver = { 165, 170, 178 },
+			gold = { 240, 190, 40 },
+			blue = { 30, 110, 210 },
+			teal = { 40, 180, 175 },
+		},
+		paint = function(c)
+			local deg = math.abs(math.deg(c.theta))
+			if c.t > -0.35 and c.t < -0.15 then
+				return "gold" -- cinturón
+			elseif c.t > 0.02 and c.t < 0.12 then
+				return pick(c.rng, "gold", 2, "silver", 1)
+			elseif c.t > 0 and (deg < 6 or math.abs(deg - 90) < 6) then
+				return "gold" -- tiras que suben
+			end
+			return pick(c.rng, "white", 4, "light", 2, "silver", 0.5)
+		end,
+		decor = {
+			{ kind = "wings", colors = { "blue", "teal", "blue" }, t = 0.4 },
+			{ kind = "crown", color = "gold", gem = "blue" },
+		},
+		fx = { sparkles = { 255, 230, 120 } },
+	},
+	{
+		id = "laser",
+		name = "Láser",
+		icon = "🥽",
+		palette = {
+			yellow = { 250, 205, 40 },
+			orange = { 240, 140, 40 },
+			red = { 210, 50, 40 },
+			black = { 25, 25, 28 },
+			neonRed = { 255, 40, 40, neon = true },
+		},
+		paint = function(c)
+			local e = Paint.oval(c, 55, 2.2, 3, -1.5)
+			if e < 0.55 then
+				return if c.v < -2 then "red" else "orange"
+			elseif e < 0.75 then
+				return "yellow"
+			elseif e < 1 then
+				return "orange"
+			end
+			if c.front and math.abs(c.u) < 1.2 and c.t < 0.4 then
+				return if c.row % 2 == 0 then "orange" else "yellow"
+			end
+			return pick(c.rng, "yellow", 4, "orange", 2)
+		end,
+		decor = {
+			{ kind = "visor", theta = -30, t = 0.6, color = "black", rim = "neonRed", lens = "neonRed" },
+		},
+	},
+	{
+		id = "metal_caliente",
+		name = "Metal Caliente",
+		icon = "⚙️",
+		palette = {
+			black = { 30, 30, 32 },
+			dark = { 55, 55, 60 },
+			gray = { 90, 90, 96 },
+			orange = { 245, 135, 30 },
+			yellow = { 250, 210, 40 },
+			lava = { 230, 60, 20, neon = true, glass = 0.2 },
+		},
+		paint = function(c)
+			local e = Paint.oval(c, 55, 2.2, 3.6, -0.5)
+			if e < 0.65 then
+				return pick(c.rng, "gray", 2, "lava", 1, "dark", 1)
+			elseif e < 1 then
+				return "orange"
+			end
+			if c.front and c.v > 2.5 and math.abs(c.u) < (8 - c.v) * 0.45 then
+				return pick(c.rng, "yellow", 2, "lava", 1, "orange", 1)
+			end
+			return pick(c.rng, "black", 4, "dark", 3, "gray", 2)
+		end,
+		fx = { light = { 255, 130, 40, 12, 1 } },
+	},
+	{
+		id = "alpino",
+		name = "Alpino",
+		icon = "🏔️",
+		palette = {
+			white = { 240, 240, 240 },
+			light = { 195, 198, 202 },
+			gray = { 140, 142, 148 },
+			dark = { 95, 97, 103 },
+			sky = { 160, 205, 235 },
+			pine = { 30, 120, 60 },
+			trunk = { 100, 65, 40 },
+		},
+		paint = function(c)
+			local e = Paint.oval(c, 55, 2, 2.6, -2)
+			if e < 0.4 then
+				return "gray"
+			elseif e < 1 then
+				return "white"
+			end
+			if c.t < -0.55 then
+				return pick(c.rng, "dark", 3, "gray", 2)
+			elseif c.t < -0.2 then
+				return pick(c.rng, "gray", 2, "light", 2, "white", 1)
+			elseif c.t > 0.42 + math.abs(math.sin(c.theta)) * 0.12 and c.t < 0.72 then
+				return pick(c.rng, "sky", 4, "white", 1)
+			end
+			return if c.noise(0.4) > 0.3 then "light" else "white"
+		end,
+		decor = {
+			{ kind = "pines", count = 9, t = 0.15, color = "pine", trunk = "trunk" },
+		},
+	},
+	{
+		id = "copo_nieve",
+		name = "Copo de Nieve",
+		icon = "❄️",
+		palette = {
+			white = { 248, 250, 252 },
+			pale = { 180, 220, 240 },
+			sky = { 120, 190, 235 },
+			azure = { 60, 150, 220 },
+			blue = { 30, 110, 200 },
+			glass = { 140, 200, 240, glass = 0.35 },
+		},
+		paint = function(c)
+			-- Copo grande de 8 brazos al frente.
+			if c.front and c.z < -2 then
+				local du, dv = c.u, c.v + 0.5
+				local r = math.sqrt(du * du + dv * dv)
+				if r < 0.8 then
+					return "sky"
+				elseif r < 4.4 then
+					local angle = math.atan2(dv, du) % (math.pi / 4)
+					local off = math.min(angle, math.pi / 4 - angle)
+					if r * math.sin(off) < 0.6 then
+						return "white"
+					end
+				end
+			end
+			return pick(c.rng, "sky", 3, "azure", 3, "blue", 1, "pale", 2, "glass", 1)
+		end,
+		decor = {
+			{ kind = "flakes", color = "white", size = 1, spots = { { -45, 0.6 }, { 45, 0.6 }, { -45, -0.55 }, { 45, -0.55 } } },
+		},
+		fx = { sparkles = { 220, 240, 255 } },
+	},
+	{
+		id = "fuego_fresco",
+		name = "Fuego Fresco",
+		icon = "🌗",
+		palette = {
+			navy = { 25, 40, 75 },
+			blue = { 30, 110, 200 },
+			azure = { 60, 155, 220 },
+			sky = { 120, 205, 235 },
+			ice = { 210, 240, 250 },
+			orange = { 245, 130, 30 },
+			red = { 215, 55, 35 },
+			deep = { 160, 35, 30 },
+			light = { 250, 175, 70 },
+			yellow = { 250, 210, 50 },
+		},
+		paint = function(c)
+			-- Mitad fría (izquierda, mirando de frente) y mitad caliente, con una costura azul noche.
+			if math.abs(c.x) < 1.2 then
+				return "navy"
+			end
+			local cold = c.x > 0
+			local e = Paint.oval(c, 55, 2.2, 3.2, -0.5)
+			if e < 0.35 then
+				return if cold then "sky" else "orange"
+			elseif e < 0.75 then
+				return if cold then "ice" else "light"
+			elseif e < 1 then
+				return if cold then "sky" else "yellow"
+			end
+			if cold then
+				return pick(c.rng, "blue", 3, "azure", 2, "sky", 2)
+			end
+			return pick(c.rng, "orange", 3, "red", 2, "deep", 1)
+		end,
+	},
+	{
+		id = "futbol",
+		name = "Fútbol",
+		icon = "⚽",
+		palette = {
+			white = { 245, 245, 242 },
+			cream = { 230, 230, 225 },
+			black = { 25, 25, 28 },
+			gold = { 220, 175, 60 },
+			wine = { 130, 25, 30 },
+		},
+		paint = function(c)
+			-- Pentágonos negros donde caen los 12 vértices de un icosaedro (como una pelota).
+			local half = 8.4
+			local dx, dy, dz = c.x / 6, (c.v + 0.3) / half, c.z / 6
+			local m = math.sqrt(dx * dx + dy * dy + dz * dz)
+			for _, p in BALL_POINTS do
+				if (dx * p[1] + dy * p[2] + dz * p[3]) / m > 0.955 then
+					return "black"
+				end
+			end
+			return pick(c.rng, "white", 6, "cream", 1)
+		end,
+		decor = {
+			{ kind = "star", theta = 0, t = 0.38, color = "gold", size = 0.4, backing = "wine" },
+		},
 	},
 }
 

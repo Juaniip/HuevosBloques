@@ -1,4 +1,4 @@
--- Galería: los 16 huevos en ronda, cada uno en su pedestal mirando al centro, con su nombre arriba.
+-- Galería: todos los huevos en ronda, cada uno en su pedestal mirando al centro, con su nombre arriba.
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -8,7 +8,7 @@ local EggBuilder = require(ReplicatedStorage.Shared.EggBuilder)
 
 local Parts = Kit.Parts
 
-local RADIUS = 60
+local SPACING = 24 -- studs entre huevo y huevo
 local PEDESTAL = 2
 
 Lighting.ClockTime = 14
@@ -43,11 +43,12 @@ local function label(pedestal: BasePart, def)
 	gui.Parent = pedestal
 end
 
+local radius = math.max(60, #Eggs.list * SPACING / (2 * math.pi))
 local started = os.clock()
 local total = 0
 for index, def in Eggs.list do
 	local angle = (index - 1) / #Eggs.list * math.pi * 2
-	local position = Vector3.new(math.sin(angle) * RADIUS, 0, math.cos(angle) * RADIUS)
+	local position = Vector3.new(math.sin(angle) * radius, 0, math.cos(angle) * radius)
 	local facing = CFrame.lookAt(position, Vector3.zero) -- el frente del huevo (-Z) mira al centro
 
 	local pedestal = Parts.cylinder("Pedestal", PEDESTAL, 16, facing * CFrame.new(0, PEDESTAL / 2, 0), Color3.fromRGB(250, 250, 252), gallery)

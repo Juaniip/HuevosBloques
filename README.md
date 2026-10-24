@@ -1,6 +1,6 @@
 # 🥚 Huevos de Bloques
 
-Los 16 huevos hechos con ladrillos, armados por código en Roblox a partir de las fotos de
+Los huevos hechos con ladrillos, armados por código en Roblox a partir de las fotos de
 `Escritorio/Huevos`. Por ahora es una galería para verlos: más adelante se suman al juego de criaturas.
 
 ## Cómo verlos
@@ -34,6 +34,21 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | 🌨️ Ventisca | Celestes y blancos, con una franja blanca |
 | 🌋 Volcán | Piedra negra con grietas de lava que brillan |
 | 🧊 Hielo | Celestes, rombo blanco al frente y ladrillos transparentes |
+| 💧 Agua | Azules con olas trenzadas celestes y turquesa |
+| 🟤 Barro | Marrones parejos |
+| ☁️ Nube | Blancos y celestes pálidos, óvalos a los costados y bultos de nube |
+| 🌶️ Picante | Amarillo arriba, naranja con pintas en el medio, rojo abajo, con cabito y hojas |
+| 🐦‍🔥 Pájaro de Fuego | Naranja y bordó con una franja amarilla y chispas |
+| 🦋 Mariposa | Amarillo y naranja con manchas rosas y celestes, y dos mariposas |
+| 🪷 Nenúfar | Verdes a rayas con una flor de loto arriba |
+| 🦎 Camaleón | Todos los colores, óvalos de arcoíris y cuernos |
+| 🛡️ Paladín | Blanco con cinturón y tiras doradas, corona y alas de plumas |
+| 🥽 Láser | Amarillo y naranja con óvalos y un visor negro con borde rojo que brilla |
+| ⚙️ Metal Caliente | Negro y gris con óvalos naranjas y lava al frente |
+| 🏔️ Alpino | Roca gris abajo, nieve en el medio, cielo arriba y pinitos |
+| ❄️ Copo de Nieve | Azules con un copo grande al frente y cuatro chicos |
+| 🌗 Fuego Fresco | Mitad azul y mitad naranja, con una costura azul noche |
+| ⚽ Fútbol | Pelota blanca con pentágonos negros y una estrellita dorada |
 
 ## Cómo está hecho
 
@@ -41,8 +56,8 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 |---|---|
 | `src/shared/Eggs.luau` | Los 16 huevos: paleta, cómo se pinta cada ladrillo, adornos y efectos |
 | `src/shared/EggBuilder.luau` | Arma la cáscara por capas, la pinta y junta las celdas iguales en ladrillos de 1 a 4 |
-| `src/shared/EggDecor.luau` | Adornos: aletas, espinas, brazo de cactus, coral, estrella, hojas, cúpulas, puntos y pie |
-| `src/shared/Paint.luau` | Ayudas para pintar (elegir color por peso, líneas) |
+| `src/shared/EggDecor.luau` | Adornos: aletas, espinas, brazo de cactus, coral, estrella, hojas, cúpulas, puntos, pie, copos, pinos, cuernos, visor, corona, alas, flor de loto y mariposas |
+| `src/shared/Paint.luau` | Ayudas para pintar (elegir color por peso, líneas, óvalos a los costados) |
 | `src/server/Main.server.luau` | La galería |
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
 
