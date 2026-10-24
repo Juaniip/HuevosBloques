@@ -12,7 +12,7 @@ Currencies.list = {
 		name = "Gemas",
 		color = Color3.fromRGB(170, 90, 230),
 		file = "gema.png",
-		icon = "",
+		icon = "109099545448219",
 		pad = { min = 1, max = 5, cooldown = 4 },
 	},
 	{
@@ -20,7 +20,7 @@ Currencies.list = {
 		name = "Oro",
 		color = Color3.fromRGB(245, 195, 50),
 		file = "oro.png",
-		icon = "",
+		icon = "91514926974322",
 		pad = { min = 50, max = 500, cooldown = 3 },
 	},
 	{
@@ -28,10 +28,13 @@ Currencies.list = {
 		name = "Comida",
 		color = Color3.fromRGB(235, 70, 50),
 		file = "comida.png",
-		icon = "",
+		icon = "107308367736833",
 		pad = { min = 20, max = 200, cooldown = 3 },
 	},
 }
+
+-- Ícono de la experiencia (todavía no es una moneda de la barra; queda para la interfaz que viene).
+Currencies.xpIcon = "rbxassetid://95305119081484"
 
 Currencies.byId = {}
 for _, currency in Currencies.list do

@@ -153,7 +153,7 @@ local function label(pedestal: BasePart, egg: Model, def)
 			Ui.new("ImageLabel", {
 				Name = "Icon",
 				LayoutOrder = 1,
-				Size = UDim2.fromOffset(9, 18), -- los íconos son banderitas angostas
+				Size = UDim2.fromOffset(15, 19), -- las banderas son un poco más altas que anchas
 				BackgroundTransparency = 1,
 				Image = each.icon,
 				ScaleType = Enum.ScaleType.Fit,
