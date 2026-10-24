@@ -63,6 +63,19 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | Popó, Legendario, Pirata, Planta Carnívora | Anillos marrones; arcoíris con nube y estrellas; sombrero, parche y bigote; boca con dientes y hojas |
 | Robot, Steampunk, Medieval | Lente azul y luces; cúpula de cobre, engranaje y caño; casco de caballero |
 
+## Monedas
+
+Tres botones en el piso, delante de donde aparecés: pisás uno y recolectás una cantidad al azar de
+**gemas**, **oro** o **comida**. Sale un "+99" con el ícono y arriba al centro está la barra con las
+tres monedas (el número sube contando).
+
+- Cantidades y tiempo de espera de cada botón: `src/shared/Currencies.luau` (`pad = { min, max, cooldown }`).
+- Íconos: subí los PNG de `assets/monedas` y pegá el id en `icon` de cada moneda. Mientras no estén,
+  la interfaz dibuja unos simples.
+- Lo guardado se carga con Kit.DataStore. En Studio hace falta **Game Settings → Security → Enable
+  Studio Access to API Services** para que quede guardado entre partidas.
+- El botón verde "+" todavía no abre nada: avisa por `CurrencyHud.plusClicked` (para la tienda).
+
 ## Íconos de los elementos
 
 Roblox no lee imágenes desde la carpeta del proyecto: hay que subirlas una vez.
@@ -92,6 +105,12 @@ Los PNG salen de las imágenes de `Escritorio/Huevos` con el fondo blanco recort
 | `src/server/Main.server.luau` | La galería (huevos en anillos) y las etiquetas arriba de cada huevo |
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
 | `src/client/Labels.client.luau` | Anima las etiquetas: letras en ola, cartel que flota y colores que giran |
+| `src/shared/Currencies.luau` | Las monedas, cuánto da cada botón y el formato "1.68 M" |
+| `src/server/Wallet.luau` | Billetera de cada jugador (guardado y atributos) |
+| `src/server/Pads.luau` | Botones del piso: detectan la pisada y dan la moneda |
+| `src/client/CurrencyHud.luau` | Barra de monedas de arriba |
+| `src/client/CollectPopup.luau` | El "+99" que sale del botón y los íconos que flotan sobre los botones |
+| `src/client/CurrencyIcon.luau` | Ícono de cada moneda (imagen subida o dibujo simple) |
 
 **Agregar un huevo:** copiá uno de `Eggs.list` y cambiale el `id`, el `element` (uno, o dos como
 `{ "llama", "hielo" }`), la paleta y la función `paint`.
