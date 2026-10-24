@@ -1,5 +1,6 @@
--- Monedas del juego: gemas, oro y comida (en el orden en que se ven arriba).
---   Currencies.byId.gold -> { id, name, color, icon, pad = { min, max, cooldown } }
+-- Monedas del juego: gemas, oro y comida (las de la barra de arriba, en ese orden), XP y estrellas.
+--   Currencies.byId.gold -> { id, name, color, icon, bar?, pad = { min, max, cooldown } }
+--   bar = false: se guarda y se recolecta, pero no aparece en la barra de arriba
 --   Currencies.format(1680000) -> "1.68 M"
 --
 -- Íconos: las imágenes diseñadas están en assets/monedas (`file`). Roblox solo muestra imágenes
@@ -31,10 +32,25 @@ Currencies.list = {
 		icon = "107308367736833",
 		pad = { min = 20, max = 200, cooldown = 3 },
 	},
+	{
+		id = "xp",
+		name = "XP",
+		color = Color3.fromRGB(60, 170, 240),
+		file = "xp.png",
+		icon = "95305119081484",
+		bar = false,
+		pad = { min = 10, max = 100, cooldown = 3 },
+	},
+	{
+		id = "stars",
+		name = "Estrellas",
+		color = Color3.fromRGB(255, 215, 60),
+		file = "estrella.png",
+		icon = "",
+		bar = false,
+		pad = { min = 1, max = 3, cooldown = 5 },
+	},
 }
-
--- Ícono de la experiencia (todavía no es una moneda de la barra; queda para la interfaz que viene).
-Currencies.xpIcon = "rbxassetid://95305119081484"
 
 Currencies.byId = {}
 for _, currency in Currencies.list do

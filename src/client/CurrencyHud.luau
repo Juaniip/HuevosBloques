@@ -129,7 +129,12 @@ end
 local function fitToScreen(container: Frame, scale: UIScale)
 	local camera = workspace.CurrentCamera
 	local function update()
-		local total = #Currencies.list * (ITEM_WIDTH + GAP)
+		local total = 0
+		for _, currency in Currencies.list do
+			if currency.bar ~= false then
+				total += ITEM_WIDTH + GAP
+			end
+		end
 		scale.Scale = math.min(1, (camera.ViewportSize.X - 24) / total)
 	end
 	camera:GetPropertyChangedSignal("ViewportSize"):Connect(update)
@@ -161,7 +166,9 @@ function CurrencyHud.start()
 	})
 	fitToScreen(container, Ui.new("UIScale", { Parent = container }))
 	for order, currency in Currencies.list do
-		item(container, currency, order)
+		if currency.bar ~= false then
+			item(container, currency, order)
+		end
 	end
 end
 

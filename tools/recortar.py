@@ -22,7 +22,7 @@ ELEMENTOS = {
     "primal": "primitivo", "puro": "puro", "sueño": "sueno", "terra": "terra", "tiempo": "tiempo",
     "viento": "viento",
 }
-MONEDAS = {"food": "comida", "gema": "gema", "oro": "oro", "xp": "xp"}
+MONEDAS = {"food": "comida", "gema": "gema", "oro": "oro", "star": "estrella", "xp": "xp"}
 
 
 def recortar(origen, destino, size=512):
