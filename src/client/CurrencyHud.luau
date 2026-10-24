@@ -40,14 +40,24 @@ local function plusButton(parent: Instance, currency)
 		Size = UDim2.fromOffset(44, 44),
 		BackgroundColor3 = Color3.new(1, 1, 1),
 		AutoButtonColor = false,
-		Font = FONT,
-		Text = "+",
-		TextSize = 38,
-		TextColor3 = Color3.new(1, 1, 1),
+		Text = "",
 		ZIndex = 4,
 		Parent = parent,
 	})
 	Ui.round(button, 9)
+	-- El "+" va en su propio texto: el degradé verde del botón también teñiría el texto del botón.
+	local plus = Ui.new("TextLabel", {
+		Name = "Sign",
+		Size = UDim2.fromScale(1, 1),
+		BackgroundTransparency = 1,
+		Font = FONT,
+		Text = "+",
+		TextSize = 38,
+		TextColor3 = Color3.new(1, 1, 1),
+		ZIndex = 5,
+		Parent = button,
+	})
+	Ui.new("UIStroke", { Color = Color3.fromRGB(30, 95, 20), Thickness = 2, Parent = plus })
 	Ui.new("UIGradient", {
 		Rotation = 90,
 		Color = ColorSequence.new(Color3.fromRGB(150, 230, 80), Color3.fromRGB(60, 165, 35)),

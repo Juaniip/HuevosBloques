@@ -70,8 +70,8 @@ Tres botones en el piso, delante de donde aparecés: pisás uno y recolectás un
 tres monedas (el número sube contando).
 
 - Cantidades y tiempo de espera de cada botón: `src/shared/Currencies.luau` (`pad = { min, max, cooldown }`).
-- Íconos: subí los PNG de `assets/monedas` y pegá el id en `icon` de cada moneda. Mientras no estén,
-  la interfaz dibuja unos simples.
+- Íconos: son las imágenes de `assets/monedas` (las de `Escritorio/Huevos/Monedas` sin el fondo).
+  Subilas una vez y pegá cada número en `icon` de `Currencies.luau`.
 - Lo guardado se carga con Kit.DataStore. En Studio hace falta **Game Settings → Security → Enable
   Studio Access to API Services** para que quede guardado entre partidas.
 - El botón verde "+" todavía no abre nada: avisa por `CurrencyHud.plusClicked` (para la tienda).

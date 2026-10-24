@@ -2,8 +2,8 @@
 --   Currencies.byId.gold -> { id, name, color, icon, pad = { min, max, cooldown } }
 --   Currencies.format(1680000) -> "1.68 M"
 --
--- Íconos: los PNG están en assets/monedas. Hay que subirlos a Roblox (Asset Manager → Bulk Import)
--- y pegar el id en `icon`. Mientras esté vacío, la interfaz dibuja uno simple con formas.
+-- Íconos: las imágenes diseñadas están en assets/monedas (`file`). Roblox solo muestra imágenes
+-- subidas a Roblox: subilas una vez (Asset Manager → Bulk Import) y pegá el número en `icon`.
 local Currencies = {}
 
 Currencies.list = {
@@ -11,6 +11,7 @@ Currencies.list = {
 		id = "gems",
 		name = "Gemas",
 		color = Color3.fromRGB(170, 90, 230),
+		file = "gema.png",
 		icon = "",
 		pad = { min = 1, max = 5, cooldown = 4 },
 	},
@@ -18,6 +19,7 @@ Currencies.list = {
 		id = "gold",
 		name = "Oro",
 		color = Color3.fromRGB(245, 195, 50),
+		file = "oro.png",
 		icon = "",
 		pad = { min = 50, max = 500, cooldown = 3 },
 	},
@@ -25,6 +27,7 @@ Currencies.list = {
 		id = "food",
 		name = "Comida",
 		color = Color3.fromRGB(235, 70, 50),
+		file = "comida.png",
 		icon = "",
 		pad = { min = 20, max = 200, cooldown = 3 },
 	},
