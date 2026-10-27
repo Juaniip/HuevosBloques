@@ -72,6 +72,9 @@ medidas de sus tres fases. `DragonBuilder.luau` los arma todos igual: cuerpo, pa
 cuello, cabeza (ojos grandes para el bebé), cuernos, cresta, alas de membrana, púas y la cola con
 la llama en la punta.
 
+Los dragones caminan en el lugar (`src/client/Walk.client.luau`): patas en diagonal, el cuerpo sube y
+baja, la cabeza cabecea, la cola se ondula y las alas aletean. Solo se animan los que están cerca.
+
 **Agregar un dragón:** copiá `Fuego.luau`, cambiale `id`, `egg` (el id del huevo), la paleta y las
 medidas, y sumalo a la lista de `Dragons/init.luau`.
 
@@ -122,6 +125,7 @@ python tools/recortar.py
 | `src/server/Main.server.luau` | La galería (una fila por huevo con sus fases) y las etiquetas |
 | `src/shared/DragonBuilder.luau` | Arma un dragón de bloques a partir de su especie y su fase |
 | `src/shared/Dragons/` | Las especies de dragón (una por archivo) y el orden de las fases |
+| `src/client/Walk.client.luau` | La caminata leve de los dragones |
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
 | `src/client/Labels.client.luau` | Anima las etiquetas: letras en ola, cartel que flota y colores que giran |
 | `src/shared/Currencies.luau` | Las monedas, cuánto da cada botón y el formato "1.68 M" |
