@@ -1,6 +1,6 @@
 # 🥚 Huevos de Bloques
 
-Los huevos hechos con ladrillos, armados por código en Roblox a partir de las fotos de
+Los huevos y sus dragones hechos con ladrillos, armados por código en Roblox a partir de las fotos de
 `Escritorio/Huevos`. Por ahora es una galería para verlos: más adelante se suman al juego de criaturas.
 
 ## Cómo verlos
@@ -12,7 +12,9 @@ rojo serve
 En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo → Connect**) y dale a **Play**.
 
 - Usa el Kit de `../RobloxDev/Kit/src`, así que las dos carpetas tienen que estar juntas en el escritorio.
-- Los huevos están en anillos alrededor del punto de aparición. El que tenés cerca gira solo para que lo veas de todos lados.
+- Cada huevo es una fila: **huevo, dragón bebé, joven y adulto**, de izquierda a derecha. Las fases que
+  todavía no están hechas muestran un "?". Primero van los huevos que ya tienen dragones.
+- El huevo que tenés cerca gira solo para que lo veas de todos lados.
 
 ## Los huevos
 
@@ -63,6 +65,16 @@ En Studio: abrí un **Baseplate**, conectá el plugin Rojo (**Plugins → Rojo �
 | Popó, Legendario, Pirata, Planta Carnívora | Anillos marrones; arcoíris con nube y estrellas; sombrero, parche y bigote; boca con dientes y hojas |
 | Robot, Steampunk, Medieval | Lente azul y luces; cúpula de cobre, engranaje y caño; casco de caballero |
 
+## Dragones
+
+Cada especie es un archivo en `src/shared/Dragons/` (por ahora `Fuego.luau`) con su paleta y las
+medidas de sus tres fases. `DragonBuilder.luau` los arma todos igual: cuerpo, patas con garras,
+cuello, cabeza (ojos grandes para el bebé), cuernos, cresta, alas de membrana, púas y la cola con
+la llama en la punta.
+
+**Agregar un dragón:** copiá `Fuego.luau`, cambiale `id`, `egg` (el id del huevo), la paleta y las
+medidas, y sumalo a la lista de `Dragons/init.luau`.
+
 ## Monedas
 
 Cinco botones en el piso, delante de donde aparecés: pisás uno y recolectás una cantidad al azar de
@@ -107,7 +119,9 @@ python tools/recortar.py
 | `src/shared/Paint.luau` | Ayudas para pintar (elegir color por peso, líneas, óvalos a los costados) |
 | `src/shared/Elements.luau` | Los 21 elementos (Terra, Llama, Mar, Naturaleza...), sus colores y los ids de sus íconos |
 | `assets/` | Íconos de elementos y monedas en PNG, listos para subir a Roblox |
-| `src/server/Main.server.luau` | La galería (huevos en anillos) y las etiquetas arriba de cada huevo |
+| `src/server/Main.server.luau` | La galería (una fila por huevo con sus fases) y las etiquetas |
+| `src/shared/DragonBuilder.luau` | Arma un dragón de bloques a partir de su especie y su fase |
+| `src/shared/Dragons/` | Las especies de dragón (una por archivo) y el orden de las fases |
 | `src/client/Spin.client.luau` | Hace girar los huevos cercanos |
 | `src/client/Labels.client.luau` | Anima las etiquetas: letras en ola, cartel que flota y colores que giran |
 | `src/shared/Currencies.luau` | Las monedas, cuánto da cada botón y el formato "1.68 M" |

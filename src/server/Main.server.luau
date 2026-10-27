@@ -1,21 +1,27 @@
--- Galería: todos los huevos en anillos, cada uno en su pedestal mirando al centro, con su etiqueta arriba.
+-- Galería: una fila por huevo con sus tres fases de dragón al lado (huevo, bebé, joven, adulto),
+-- cada uno en su pedestal con su etiqueta arriba.
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Kit = require(ReplicatedStorage.Kit)
 local Eggs = require(ReplicatedStorage.Shared.Eggs)
 local EggBuilder = require(ReplicatedStorage.Shared.EggBuilder)
+local DragonBuilder = require(ReplicatedStorage.Shared.DragonBuilder)
+local Dragons = require(ReplicatedStorage.Shared.Dragons)
 local Elements = require(ReplicatedStorage.Shared.Elements)
 
 local Parts = Kit.Parts
 local Ui = Kit.Ui
 
 local EGG_SCALE = 0.45 -- tamaño de los huevos en la galería (1 = 12 studs de ancho)
-local SPACING = 12 -- studs entre huevo y huevo, a lo largo del anillo
-local FIRST_RING = 26 -- radio del primer anillo
-local RING_GAP = 20 -- distancia entre anillos
+local SLOT = 14 -- studs entre el huevo y cada fase, en la fila
+local COLUMNS = 4 -- filas una al lado de la otra
+local COLUMN_GAP = 18 -- espacio entre una fila y la de al lado
+local ROW_GAP = 22 -- espacio hacia atrás entre filas
+local FIRST_ROW = 24 -- distancia desde donde aparecés hasta la primera fila
 local PEDESTAL = 1
 local PEDESTAL_SIZE = 8
+local DRAGON_PEDESTAL = 11
 local LABEL_GAP = 2.5 -- studs entre la punta del huevo y la etiqueta
 local LABEL_RANGE = 70 -- más lejos que esto, la etiqueta no se ve
 
@@ -205,38 +211,97 @@ local function label(pedestal: BasePart, egg: Model, def)
 	gui.Parent = anchor
 end
 
--- Reparte los huevos en anillos alrededor del centro: cada anillo lleva los que le entran.
-local spots = {}
-do
-	local ring, left = 0, #Eggs.list
-	while left > 0 do
-		local radius = FIRST_RING + ring * RING_GAP
-		local count = math.min(left, math.floor(2 * math.pi * radius / SPACING))
-		local offset = ring * 0.5 -- cada anillo corrido, así no quedan uno detrás del otro
-		for i = 0, count - 1 do
-			local angle = (i + offset) / count * math.pi * 2
-			table.insert(spots, Vector3.new(math.sin(angle) * radius, 0, math.cos(angle) * radius))
-		end
-		left -= count
-		ring += 1
-	end
+-- Cartelito gris con "?" para las fases que todavía no están hechas.
+local function missing(pedestal: BasePart, height: number)
+	local anchor = Instance.new("Attachment")
+	anchor.Name = "LabelAnchor"
+	anchor.Parent = pedestal
+	anchor.WorldCFrame = CFrame.new(pedestal.Position + Vector3.new(0, height, 0))
+	local gui = Ui.new("BillboardGui", {
+		Name = "Missing",
+		Size = UDim2.fromOffset(48, 48),
+		MaxDistance = LABEL_RANGE,
+		LightInfluence = 0,
+		Adornee = anchor,
+	})
+	local text = Ui.new("TextLabel", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = Color3.fromRGB(60, 65, 80),
+		BackgroundTransparency = 0.3,
+		Font = Enum.Font.FredokaOne,
+		TextSize = 32,
+		TextColor3 = Color3.fromRGB(220, 225, 235),
+		Text = "?",
+		Parent = gui,
+	})
+	Ui.round(text, 24)
+	gui.Parent = anchor
 end
+
+local function pedestalAt(cframe: CFrame, size: number): BasePart
+	local pedestal = Parts.cylinder("Pedestal", PEDESTAL, size, cframe * CFrame.new(0, PEDESTAL / 2, 0), Color3.fromRGB(250, 250, 252), gallery)
+	Parts.cylinder("PedestalRim", 0.3, size + 0.6, cframe * CFrame.new(0, 0.15, 0), Color3.fromRGB(200, 205, 215), gallery)
+	return pedestal
+end
+
+-- Filas: cada huevo con sus tres fases al lado (HUEVO, BEBÉ, JOVEN, ADULTO), de izquierda a derecha
+-- mirando desde donde aparecés. Primero van los huevos que ya tienen dragones.
+local order = {}
+for index, def in Eggs.list do
+	table.insert(order, { def = def, index = index, species = Dragons.byEgg[def.id] })
+end
+table.sort(order, function(a, b)
+	if (a.species ~= nil) ~= (b.species ~= nil) then
+		return a.species ~= nil
+	end
+	return a.index < b.index
+end)
 
 local started = os.clock()
 local total = 0
-for index, def in Eggs.list do
-	local position = spots[index]
-	local facing = CFrame.lookAt(position, Vector3.zero) -- el frente del huevo (-Z) mira al centro
+local columnWidth = SLOT * 4 + COLUMN_GAP
+for i, entry in order do
+	local column = (i - 1) % COLUMNS
+	local row = (i - 1) // COLUMNS
+	local columnX = (column - (COLUMNS - 1) / 2) * columnWidth
+	local z = FIRST_ROW + row * ROW_GAP
+	-- Mirando hacia +Z, la izquierda es +X: el huevo va a la izquierda y las fases a su derecha.
+	local function slot(k: number): CFrame
+		return CFrame.new(columnX + (1.5 - k) * SLOT, 0, z)
+	end
 
-	local pedestal = Parts.cylinder("Pedestal", PEDESTAL, PEDESTAL_SIZE, facing * CFrame.new(0, PEDESTAL / 2, 0), Color3.fromRGB(250, 250, 252), gallery)
-	Parts.cylinder("PedestalRim", 0.3, PEDESTAL_SIZE + 0.6, facing * CFrame.new(0, 0.15, 0), Color3.fromRGB(200, 205, 215), gallery)
-
-	local egg = EggBuilder.build(def, nil, facing * CFrame.new(0, PEDESTAL, 0))
+	local def = entry.def
+	local pedestal = pedestalAt(slot(0), PEDESTAL_SIZE)
+	local egg = EggBuilder.build(def, nil, slot(0) * CFrame.new(0, PEDESTAL, 0))
 	egg:ScaleTo(EGG_SCALE) -- achica todo (ladrillos, adornos y efectos) desde la base
 	egg.ModelStreamingMode = Enum.ModelStreamingMode.Atomic -- que llegue entero al cliente (lo hace girar)
 	label(pedestal, egg, def)
 	egg.Parent = gallery
 	total += #egg:GetDescendants()
+
+	for k, stageId in Dragons.stages do
+		local base = slot(k)
+		local stand = pedestalAt(base, DRAGON_PEDESTAL)
+		local species = entry.species
+		if species then
+			local stage = species.stages[stageId]
+			-- De costado y un poco de frente (tres cuartos), con la cabeza hacia el huevo.
+			local dragon = DragonBuilder.build(species, stageId, nil, base * CFrame.new(0, PEDESTAL, 0) * CFrame.Angles(0, math.rad(-35), 0))
+			dragon:ScaleTo(stage.scale)
+			dragon.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
+			label(stand, dragon, { name = `{species.name} {stage.name}`, element = def.element })
+			dragon.Parent = gallery
+			total += #dragon:GetDescendants()
+		else
+			missing(stand, 4)
+		end
+	end
 end
 
-print(`[HuevosBloques] {#Eggs.list} huevos armados ({total} piezas) en {string.format("%.2f", os.clock() - started)} s ✅`)
+-- Dónde aparecés: delante de la primera fila, mirando hacia las filas.
+local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
+if spawn then
+	spawn.CFrame = CFrame.new(0, spawn.Size.Y / 2, 0)
+end
+
+print(`[HuevosBloques] {#Eggs.list} huevos y {#Dragons.list} especies de dragón armados ({total} piezas) en {string.format("%.2f", os.clock() - started)} s ✅`)
