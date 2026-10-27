@@ -44,6 +44,7 @@ function CollectPopup.show(id: string, amount: number, position: Vector3)
 		Size = UDim2.fromOffset(260, 90),
 		AlwaysOnTop = true,
 		LightInfluence = 0,
+		Brightness = 1.4,
 		Adornee = anchor,
 		Parent = anchor,
 	})
@@ -111,14 +112,32 @@ function CollectPopup.markPads()
 		end
 		local gui = Ui.new("BillboardGui", {
 			Name = "PadIcon",
-			Size = UDim2.fromOffset(70, 70),
+			Size = UDim2.fromOffset(84, 84),
 			LightInfluence = 0,
+			Brightness = 1.6, -- un poco más brillante que el resto, para que resalte
 			MaxDistance = 80,
 			Adornee = anchor,
 			Parent = anchor,
 		})
-		local icon = CurrencyIcon.new(currency, gui, 70)
+		-- Halo del color de la moneda detrás del ícono.
+		local glow = Ui.new("Frame", {
+			Name = "Glow",
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromScale(0.8, 0.8),
+			BackgroundColor3 = currency.color,
+			BackgroundTransparency = 0.55,
+			Parent = gui,
+		})
+		Ui.round(glow, 40)
+		Ui.new("UIGradient", {
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }),
+			Rotation = 90,
+			Parent = glow,
+		})
+		local icon = CurrencyIcon.new(currency, gui, 84)
 		icon.Position = UDim2.fromScale(0, 0)
+		icon.ZIndex = 2
 		table.insert(floating, { gui = gui, phase = math.random() * 6 })
 	end
 	local function watch(folder: Instance)

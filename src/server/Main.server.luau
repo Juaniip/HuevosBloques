@@ -19,9 +19,18 @@ local PEDESTAL_SIZE = 8
 local LABEL_GAP = 2.5 -- studs entre la punta del huevo y la etiqueta
 local LABEL_RANGE = 70 -- más lejos que esto, la etiqueta no se ve
 
+-- Luz con colores vivos: menos luz ambiente (el piso blanco lavaba todo) y un poco más de
+-- saturación y contraste.
 Lighting.ClockTime = 14
-Lighting.Brightness = 2.5
-Lighting.OutdoorAmbient = Color3.fromRGB(170, 170, 180)
+Lighting.Brightness = 2.2
+Lighting.OutdoorAmbient = Color3.fromRGB(130, 130, 140)
+Lighting.Ambient = Color3.fromRGB(90, 90, 100)
+Lighting.ExposureCompensation = -0.15
+local colors = Lighting:FindFirstChild("VividColors") or Instance.new("ColorCorrectionEffect")
+colors.Name = "VividColors"
+colors.Saturation = 0.3
+colors.Contrast = 0.12
+colors.Parent = Lighting
 
 local baseplate = workspace:FindFirstChild("Baseplate")
 if baseplate and baseplate:IsA("BasePart") then
