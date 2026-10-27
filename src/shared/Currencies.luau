@@ -13,7 +13,7 @@ Currencies.list = {
 		name = "Gemas",
 		color = Color3.fromRGB(170, 90, 230),
 		file = "gema.png",
-		icon = "109099545448219",
+		icon = "99047274716935",
 		pad = { min = 1, max = 5, cooldown = 4 },
 	},
 	{
@@ -21,7 +21,7 @@ Currencies.list = {
 		name = "Oro",
 		color = Color3.fromRGB(245, 195, 50),
 		file = "oro.png",
-		icon = "91514926974322",
+		icon = "113975933017963",
 		pad = { min = 50, max = 500, cooldown = 3 },
 	},
 	{
@@ -29,7 +29,7 @@ Currencies.list = {
 		name = "Comida",
 		color = Color3.fromRGB(235, 70, 50),
 		file = "comida.png",
-		icon = "107308367736833",
+		icon = "117586813676807",
 		pad = { min = 20, max = 200, cooldown = 3 },
 	},
 	{
@@ -37,7 +37,7 @@ Currencies.list = {
 		name = "XP",
 		color = Color3.fromRGB(60, 170, 240),
 		file = "xp.png",
-		icon = "95305119081484",
+		icon = "108618053635708",
 		bar = false,
 		pad = { min = 10, max = 100, cooldown = 3 },
 	},
@@ -46,7 +46,7 @@ Currencies.list = {
 		name = "Estrellas",
 		color = Color3.fromRGB(255, 215, 60),
 		file = "estrella.png",
-		icon = "91869186350550",
+		icon = "120624236031985",
 		pad = { min = 1, max = 3, cooldown = 5 },
 	},
 }
