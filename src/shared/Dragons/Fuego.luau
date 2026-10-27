@@ -6,6 +6,7 @@ return {
 	name = "Fuego",
 	palette = {
 		body = { 205, 30, 30 },
+		bodyShade = { 175, 25, 25 }, -- escamas del cuello, un poco más oscuras
 		dark = { 125, 20, 20 },
 		belly = { 240, 215, 150 },
 		bellyDark = { 215, 180, 115 },
@@ -23,7 +24,7 @@ return {
 		eyeWhite = { 250, 250, 250 },
 		iris = { 105, 45, 25 },
 		pupil = { 20, 15, 15 },
-		eye = { 255, 210, 40, neon = true },
+		eye = { 255, 200, 30 },
 		nostril = { 70, 10, 10 },
 		tooth = { 250, 250, 245 },
 	},
@@ -37,7 +38,7 @@ return {
 				bone = { 105, 55, 35 }, -- huesos marrones de las alitas
 			},
 			body = { length = 3.4, height = 3.4, width = 3.2, lift = 1.3 },
-			legs = { thick = 1.3, claw = 0.8 },
+			legs = { thick = 1.3, claw = 0.8, shield = 0.6 },
 			head = { length = 3.2, height = 3.1, width = 3.1, snout = 1.5, raise = 2.1, forward = 0.6, cartoon = true },
 			horns = { length = 1.3, thick = 0.5, spread = 0.45 },
 			crest = { kind = "blocks" },
@@ -51,7 +52,7 @@ return {
 			body = { length = 6.5, height = 3.2, width = 3.4, lift = 2.6 },
 			legs = { thick = 1.2, claw = 1 },
 			neck = { rise = 4.2, forward = 1.6, thick = 1.6, segments = 4 },
-			head = { length = 2.8, height = 1.8, width = 2.0, snout = 1.9, pitch = -8, jawOpen = 10, cheek = 1.2 },
+			head = { length = 2.8, height = 1.8, width = 2.0, snout = 1.9, pitch = -8, jawOpen = 5, cheek = 1.2 },
 			horns = { length = 2.6, thick = 0.42 },
 			crest = { kind = "spikes", count = 6, length = 2.6 },
 			wings = { span = 8, fingers = 4, tilt = 25, bone = 0.45, colors = { outer = "wing1", inner = "wing2", base = "wing3" } },
@@ -65,7 +66,7 @@ return {
 			body = { length = 8, height = 4, width = 4.2, lift = 3.2 },
 			legs = { thick = 1.5, claw = 1.2 },
 			neck = { rise = 5.2, forward = 2, thick = 2, segments = 5 },
-			head = { length = 3.4, height = 2.2, width = 2.4, snout = 2.3, pitch = -8, tooth = 0.45, jawOpen = 12, cheek = 1.6 },
+			head = { length = 3.4, height = 2.2, width = 2.4, snout = 2.3, pitch = -8, tooth = 0.45, jawOpen = 6, cheek = 1.6 },
 			horns = { length = 3.6, thick = 0.55 },
 			crest = { kind = "spikes", count = 8, length = 3.6 },
 			wings = { span = 10.5, fingers = 4, tilt = 25, bone = 0.55, colors = { outer = "wing1", inner = "wing2", base = "wing3" } },

@@ -244,7 +244,7 @@ function DragonBuilder.build(species, stageId: string, parent: Instance?, cframe
 		pivot(rig, hip)
 		local elbow = hip + Vector3.new(0, -hipY * 0.5, -0.25)
 		local wrist = Vector3.new(x, 0.6, z - 0.05)
-		shield(Vector3.new(sx * (w / 2 + 0.2), hipY + 0.25, z), sx, thick * 1.9)
+		shield(Vector3.new(sx * (w / 2 + 0.2), hipY + 0.25, z), sx, thick * 1.9 * (legs.shield or 1))
 		beam("UpperArm", hip, elbow, thick, thick * 1.05, "body", FORWARD)
 		ball("Elbow", elbow, thick * 1.05, "dark")
 		beam("Forearm", elbow, wrist, thick * 0.85, thick * 0.85, "body", FORWARD)
@@ -258,7 +258,7 @@ function DragonBuilder.build(species, stageId: string, parent: Instance?, cframe
 		local knee = hip + Vector3.new(0, -hipY * 0.42, -thick * 0.7)
 		local ankle = Vector3.new(x, hipY * 0.3, z + thick * 0.45)
 		local heel = Vector3.new(x, 0.5, z - thick * 0.1)
-		shield(Vector3.new(sx * (w / 2 + 0.25), hipY + 0.2, z), sx, thick * 2.2)
+		shield(Vector3.new(sx * (w / 2 + 0.25), hipY + 0.2, z), sx, thick * 2.2 * (legs.shield or 1))
 		beam("Thigh", hip, knee, thick * 1.2, thick * 1.25, "body", FORWARD)
 		ball("Knee", knee, thick * 1.1, "dark")
 		beam("Shin", knee, ankle, thick * 0.9, thick * 0.9, "body", FORWARD)
@@ -295,7 +295,7 @@ function DragonBuilder.build(species, stageId: string, parent: Instance?, cframe
 			local throat = Vector3.new(0, 0, -thick * 0.42)
 			beam("Throat", prev + throat, point + throat, thick * 0.72, thick * 0.5, if i % 2 == 0 then "bellyDark" else "belly", FORWARD)
 			for _, sx in { -1, 1 } do
-				beam("NeckScale", prev + Vector3.new(sx * thick * 0.5, 0, thick * 0.1), point + Vector3.new(sx * thick * 0.45, 0, thick * 0.1), 0.15, thick * 0.55, "dark", FORWARD)
+				beam("NeckScale", prev + Vector3.new(sx * thick * 0.5, 0, thick * 0.15), point + Vector3.new(sx * thick * 0.45, 0, thick * 0.15), 0.12, thick * 0.3, if palette.bodyShade then "bodyShade" else "body", FORWARD)
 			end
 			if (P.spikes or 0) > 0 then
 				wedge("NeckSpike", Vector3.new(0.28, 0.65, 0.75), CFrame.new(point + Vector3.new(0, 0, thick * 0.58)) * CFrame.Angles(math.rad(60), math.pi, 0), "horn")
@@ -342,7 +342,7 @@ function DragonBuilder.build(species, stageId: string, parent: Instance?, cframe
 		-- Joven y adulto: hocico largo, nariz con cuernito, dientes, mandíbula abierta, cejas y aletas.
 		local snoutRear = head * CFrame.new(0, -H.height * 0.12, -H.length / 2 - H.snout * 0.25 + 0.15)
 		brick("Snout", Vector3.new(H.width * 0.8, H.height * 0.6, H.snout * 0.55), snoutRear, "body")
-		local snoutFront = snoutRear * CFrame.new(0, -H.height * 0.05, -H.snout * 0.5)
+		local snoutFront = snoutRear * CFrame.new(0, -H.height * 0.04, -H.snout * 0.38)
 		brick("SnoutTip", Vector3.new(H.width * 0.62, H.height * 0.48, H.snout * 0.5), snoutFront, "body")
 		brick("NoseRidge", Vector3.new(H.width * 0.32, 0.22, H.snout * 0.9), snoutRear * CFrame.new(0, H.height * 0.32, -H.snout * 0.2), "dark")
 		local noseTop = (snoutFront * CFrame.new(0, H.height * 0.24, -H.snout * 0.15)).Position
@@ -355,10 +355,11 @@ function DragonBuilder.build(species, stageId: string, parent: Instance?, cframe
 			end
 		end
 		-- Mandíbula de abajo, un poco abierta, con la parte de abajo crema y dos colmillos.
-		local hinge = head * CFrame.new(0, -H.height * 0.42, H.length * 0.2) * CFrame.Angles(math.rad(H.jawOpen or 10), 0, 0)
-		local jawLength = H.length * 0.7 + H.snout * 0.85
+		-- La bisagra queda adentro de la cabeza, abajo y atrás; el ángulo negativo la abre hacia abajo.
+		local hinge = head * CFrame.new(0, -H.height * 0.32, H.length * 0.3) * CFrame.Angles(-math.rad(H.jawOpen or 10), 0, 0)
+		local jawLength = H.length * 0.8 + H.snout * 0.75
 		local jaw = hinge * CFrame.new(0, 0, -jawLength / 2)
-		brick("Jaw", Vector3.new(H.width * 0.6, H.height * 0.22, jawLength), jaw, "body")
+		brick("Jaw", Vector3.new(H.width * 0.62, H.height * 0.26, jawLength), jaw, "body")
 		brick("JawUnder", Vector3.new(H.width * 0.45, H.height * 0.12, jawLength * 0.8), jaw * CFrame.new(0, -H.height * 0.14, 0.1), "belly")
 		for _, sx in { -1, 1 } do
 			wedge("Fang", Vector3.new(0.16, 0.3, 0.2), jaw * CFrame.new(sx * H.width * 0.22, H.height * 0.22, -jawLength * 0.4) * CFrame.Angles(math.rad(90), 0, 0), "tooth")
@@ -366,9 +367,10 @@ function DragonBuilder.build(species, stageId: string, parent: Instance?, cframe
 		for _, sx in { -1, 1 } do
 			-- Ojo amarillo con pupila y ceja angulosa.
 			local eye = head * CFrame.new(sx * (H.width / 2 + 0.02), H.height * 0.12, -H.length * 0.22)
-			smooth("Eye", Vector3.new(0.12, 0.45, 0.65), eye, "eye")
-			smooth("Pupil", Vector3.new(0.14, 0.42, 0.15), eye * CFrame.new(sx * 0.02, 0, -0.05), "pupil")
-			smooth("EyeShine", Vector3.new(0.15, 0.1, 0.1), eye * CFrame.new(sx * 0.03, 0.12, -0.18), "eyeWhite")
+			smooth("EyeRim", Vector3.new(0.1, 0.42, 0.6), eye, "dark")
+			smooth("Eye", Vector3.new(0.12, 0.32, 0.46), eye * CFrame.new(sx * 0.02, 0, 0), "eye")
+			smooth("Pupil", Vector3.new(0.14, 0.3, 0.11), eye * CFrame.new(sx * 0.04, 0, -0.03), "pupil")
+			smooth("EyeShine", Vector3.new(0.15, 0.07, 0.07), eye * CFrame.new(sx * 0.05, 0.08, -0.13), "eyeWhite")
 			wedge("Brow", Vector3.new(0.35, 0.4, H.length * 0.55), eye * CFrame.new(-sx * 0.05, 0.4, 0.1) * CFrame.Angles(0, math.pi, 0), "dark")
 			-- Cuernito sobre el ojo.
 			local brow = at(sx * H.width * 0.38, H.height * 0.5, -H.length * 0.05)
@@ -400,7 +402,7 @@ function DragonBuilder.build(species, stageId: string, parent: Instance?, cframe
 	-- Cresta: bloques escalonados (bebé) o un abanico de púas con forma de hoja (joven y adulto).
 	local crest = P.crest
 	if crest and crest.kind == "blocks" then
-		local crown = head * CFrame.new(0, H.height / 2 + H.height * 0.18, H.length * 0.12)
+		local crown = head * CFrame.new(0, H.height * 0.55, H.length * 0.12) -- se apoya sobre la cúpula de la cabeza
 		local steps = { { -0.3, 0.6, 0.3, "crest" }, { -0.05, 0.95, 0.35, "crestDark" }, { 0.22, 0.75, 0.3, "crest" }, { 0.42, 0.5, 0.25, "crestDark" } }
 		for _, step in steps do
 			brick("Crest", Vector3.new(H.width * 0.7, step[2], H.length * step[3]), crown * CFrame.new(0, step[2] / 2, step[1] * H.length), step[4])
